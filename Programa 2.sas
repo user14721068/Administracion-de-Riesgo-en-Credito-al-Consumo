@@ -1,7 +1,3 @@
-
-
-/* 10 FEBRERO 2025 LUNES */
-
 /* Ejercicios video C2*/
 
 /* Crea una tabla en la base de datos work de nombre "E3SQL" que contenga todos los campos de la tabla solicitud
