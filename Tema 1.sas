@@ -1,6 +1,6 @@
 /* -------------------------------------------------------------------------------------------- */     
 
-/* Ejercicios c1 */
+/* Ejercicios c1  */
 
 /*Ejemplo*/
 /*Crear un par de tablas llamadas E1SQL y E1SAS en la base de datos WORK que contenga el id del cliente y 
