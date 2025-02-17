@@ -106,8 +106,6 @@ RUN;
 
 /* --------------------------------------------------------------------------------------- */
 
-/* 11 FEBRERO 2025 */
-
 /*Ejercicios video c3*/
 
 /* Crea una tabla en al bd work de nombre E5SQL que contenga 
