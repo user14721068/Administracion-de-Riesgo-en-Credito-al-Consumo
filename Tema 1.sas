@@ -1,6 +1,7 @@
-/* -------------------------------------------------------------------------------------------- */     
+/* -------------------------------------------------------------------------------------------- */
+/* 06 FEBRERO 2025 */           
 
-/* Ejercicios c1  */
+/* Ejercicios video C1 */
 
 /*Ejemplo*/
 /*Crear un par de tablas llamadas E1SQL y E1SAS en la base de datos WORK que contenga el id del cliente y 
@@ -41,8 +42,9 @@ run;
 /* -------------------------------------------------------------------------------------------- */
 
 
+/* 10 FEBRERO 2025 LUNES */
 
-/* Ejercicios C2*/
+/* Ejercicios video C2*/
 
 /* Crea una tabla en la base de datos work de nombre "E3SQL" que contenga todos los campos de la tabla solicitud
 pero solo con los registros cuyo monto solicitado sea mayor a 10,000 pesos utilizando codigo SQL */
@@ -106,7 +108,9 @@ RUN;
 
 /* --------------------------------------------------------------------------------------- */
 
-/*Ejercicios c3*/
+/* 11 FEBRERO 2025 */
+
+/*Ejercicios video c3*/
 
 /* Crea una tabla en al bd work de nombre E5SQL que contenga 
 los campos de cliente, sexo, estado, ingreso fijo,
@@ -251,8 +255,9 @@ RUN;
 
 /* ----------------------------------------------------------------------------------------- */
 
+/* 12 FEBRERO 2025 */
 
-/* EJERCICIO C4 */
+/* EJERCICIO VIDEO C4 */
 /*Crear un par de tablas de nombre E9SQL y E9SAS que contengan los siguientes campos:
 Cliente, Nombre, Apellido Paterno, Fecha de Nacimiento, Fecha en que se hizo la solicitud,
 Edad, Ingreso Total. Aplicando los siguienes filtros: Ingreso Total > 10000 y Edad > 24*/
@@ -389,8 +394,9 @@ RUN;
 
 /* ----------------------------------------------------------------------------------------- */
 
+/* 2025 FEBRERO 13 */
 
-/* EJERCICIOS C5 */
+/* EJERCICIOS VIDEO C5 */
 
 /* Generar un reporte R1SQL y R1SAS dentro de la BD work que resuma:
 ¿Cuántos clientes hay por nivel de estudio? */
@@ -696,6 +702,205 @@ RUN;
 
 
 /* --------------------------------------------------------------------------------------------- */
+
+/* 17 FEBRERO 2025 LUNES */
+
+/* EJERCICIO C6 */
+
+/* Crear un reporte R10SQL y R10SAS que resuma cuantos clientes hay y cual es su ingreso total promedio por quinquenio de
+edad, considerando solo aquellos clientes que son hombres. */
+
+/* SQL */
+PROC SQL;
+CREATE TABLE WORK.R10SQL AS
+SELECT 	W.RANGO_EDAD,
+		COUNT(W.CLIENTE) AS CLIENTES,
+		AVG(W.INGRESO_TOTAL) AS INGRESO_PROM
+FROM
+( /* ******************************** W **************************** */
+SELECT 	Z.CLIENTE,
+		Z.EDAD,
+		CASE 	WHEN Z.EDAD >= 18 AND Z.EDAD < 23 THEN "18-23"
+				WHEN Z.EDAD >= 23 AND Z.EDAD < 28 THEN "23-28"
+				WHEN Z.EDAD >= 28 AND Z.EDAD < 33 THEN "28-33"
+				WHEN Z.EDAD >= 33 AND Z.EDAD < 38 THEN "33-38"
+				WHEN Z.EDAD >= 38 AND Z.EDAD < 43 THEN "38-43"
+				WHEN Z.EDAD >= 43 AND Z.EDAD < 53 THEN "43-53"
+				WHEN Z.EDAD >= 53 AND Z.EDAD < 58 THEN "53-58"
+				WHEN Z.EDAD >= 58 AND Z.EDAD < 63 THEN "58-63"
+				WHEN Z.EDAD >= 63 AND Z.EDAD < 68 THEN "63-68"
+				WHEN Z.EDAD >= 68 AND Z.EDAD < 73 THEN "68-73" END AS RANGO_EDAD,
+		Z.INGRESO_TOTAL
+FROM
+( /* ******************************** Z **************************** */
+SELECT 		D.CLIENTE,
+			D.INGRESO_FIJO + D.INGRESO_VARIABLE AS INGRESO_TOTAL,
+			INTCK("YEAR",D.FECHA_NACIMIENTO,S.FECHA_SOLICITUD) AS EDAD
+FROM 		ORIGINA.DEMOGRAFICOS AS D
+LEFT JOIN	ORIGINA.SOLICITUD AS S ON D.CLIENTE=S.CLIENTE
+WHERE  		D.SEXO = "M"
+) AS Z /* *************************** Z **************************** */
+) AS W /* *************************** W **************************** */
+GROUP 1
+;QUIT;
+
+
+/* SAS */
+
+DATA WORK.TEMPORAL;
+MERGE		ORIGINA.DEMOGRAFICOS 	(IN=D)
+			ORIGINA.SOLICITUD 		(IN=S);
+			INGRESO_TOTAL = INGRESO_FIJO + INGRESO_VARIABLE;
+			EDAD = INTCK('YEAR',FECHA_NACIMIENTO,FECHA_SOLICITUD);
+			IF EDAD >= 18 AND EDAD < 23 THEN RANGO_EDAD="18-23";
+			IF EDAD >= 23 AND EDAD < 28 THEN RANGO_EDAD="23-28";
+			IF EDAD >= 28 AND EDAD < 33 THEN RANGO_EDAD="28-33";
+			IF EDAD >= 33 AND EDAD < 38 THEN RANGO_EDAD="33-38";
+			IF EDAD >= 38 AND EDAD < 43 THEN RANGO_EDAD="38-43";
+			IF EDAD >= 43 AND EDAD < 53 THEN RANGO_EDAD="43-53";
+			IF EDAD >= 53 AND EDAD < 58 THEN RANGO_EDAD="53-58";
+			IF EDAD >= 58 AND EDAD < 63 THEN RANGO_EDAD="58-63";
+			IF EDAD >= 63 AND EDAD < 68 THEN RANGO_EDAD="63-68";
+			IF EDAD >= 68 AND EDAD < 73 THEN RANGO_EDAD="68-73";
+BY      	CLIENTE;
+KEEP		CLIENTE INGRESO_TOTAL EDAD RANGO_EDAD;
+IF			SEXO = "M";
+RUN;
+
+PROC SUMMARY DATA=WORK.TEMPORAL NWAY;
+CLASS  		RANGO_EDAD;
+VAR			CLIENTE INGRESO_TOTAL;
+OUTPUT OUT=WORK.R10SAS(DROP=_TYPE_ _FREQ_)
+N(CLIENTE) = CLIENTES
+MEAN(INGRESO_TOTAL) = INGRESO_PROMEDIO;
+RUN;
+
+/* MINI EXAMEN */
+/* Crear un reporte R11SQL y R11SAS que resuma cuantos clientes hay y cuanto es su edad promedio por rango de ingreso
+total, considerando solo aquellos clientes que son mujeres y considerando los siguientes rangos de ingreso:
+0 		a 1,000
+1,000	a 5,000
+5,000 	a 10,000
+10,000	a 90,000
+90,000 	a MÄS
+ */
+			
+/* SQL */
+PROC SQL;
+CREATE TABLE WORK.R11SQL AS
+SELECT 		RANGO_INGRESO,
+			COUNT(CLIENTE) AS NRO_CLIENTES,
+			AVG(EDAD) AS EDAD_PROMEDIO 
+FROM
+(       /*************************** Z *****************************************/
+SELECT 		INGRESO_FIJO + INGRESO_VARIABLE AS INGRESO_TOTAL,
+			CASE
+			WHEN (INGRESO_FIJO + INGRESO_VARIABLE) >= 0     AND (INGRESO_FIJO + INGRESO_VARIABLE) < 1000  THEN "0      a 1,000"
+			WHEN (INGRESO_FIJO + INGRESO_VARIABLE) >= 1000  AND (INGRESO_FIJO + INGRESO_VARIABLE) < 5000  THEN "1,000  a 5,000"
+			WHEN (INGRESO_FIJO + INGRESO_VARIABLE) >= 5000  AND (INGRESO_FIJO + INGRESO_VARIABLE) < 10000 THEN "5,000  a 10,000"
+			WHEN (INGRESO_FIJO + INGRESO_VARIABLE) >= 10000 AND (INGRESO_FIJO + INGRESO_VARIABLE) < 90000 THEN "10,000 a 90,000"
+			WHEN (INGRESO_FIJO + INGRESO_VARIABLE) >= 90000                                               THEN "90,000 a MÁS"
+			END AS RANGO_INGRESO,
+			D.CLIENTE,
+			INTCK('YEAR',D.FECHA_NACIMIENTO,S.FECHA_SOLICITUD) AS EDAD
+FROM 		ORIGINA.DEMOGRAFICOS AS D
+LEFT JOIN	ORIGINA.SOLICITUD AS S ON D.CLIENTE=S.CLIENTE
+WHERE 		D.SEXO = "F"
+) AS Z  /*************************** Z *****************************************/
+GROUP BY 1;
+QUIT;
+
+
+/* SAS */
+DATA WORK.TEMPORAL;
+MERGE 	ORIGINA.DEMOGRAFICOS 	(IN=D)
+		ORIGINA.SOLICITUD 		(IN=S);
+		INGRESO_TOTAL = INGRESO_FIJO + INGRESO_VARIABLE;
+		EDAD = INTCK('YEAR',FECHA_NACIMIENTO,FECHA_SOLICITUD);
+		IF INGRESO_TOTAL >= 0     AND INGRESO_TOTAL < 1000  THEN RANGO_INGRESO="0      a 1,000";
+		IF INGRESO_TOTAL >= 1000  AND INGRESO_TOTAL < 5000  THEN RANGO_INGRESO="1,000  a 5,000";
+		IF INGRESO_TOTAL >= 5000  AND INGRESO_TOTAL < 10000 THEN RANGO_INGRESO="5,000  a 10,000";
+		IF INGRESO_TOTAL >= 10000 AND INGRESO_TOTAL < 90000 THEN RANGO_INGRESO="10,000 a 90,000";
+		IF INGRESO_TOTAL >= 90000                           THEN RANGO_INGRESO="90,000 a MÁS";
+BY		CLIENTE;
+KEEP	INGRESO_TOTAL RANGO_INGRESO CLIENTE EDAD;
+IF		SEXO="F";
+RUN;
+
+PROC SUMMARY DATA=WORK.TEMPORAL NWAY;
+CLASS 	RANGO_INGRESO;
+VAR		CLIENTE EDAD;
+OUTPUT OUT=WORK.R11SAS(DROP=_TYPE_ _FREQ_)
+N(CLIENTE) = NRO_CLIENTES
+MEAN(EDAD) = EDAD_PROMEDIO;
+RUN;
+
+
+/* Generar el código SAS y SQL de los siguientes ejercicios:
+1. Crear un reporte Rn_SQL_variable y Rn_SAS_variable donde se resuma cuántos clientes 
+hay? Cuántos no pagaron su crédito? Y qué porcentaje de ellos no pagó su crédito? De las 
+siguientes variables: 
+a. código postal 
+b. municipio 
+c. estado  
+d. nivel de estudios 
+e. actividad económica 
+f. puesto solicitante 
+g. contrato laboral 
+h. sucursal 
+i. tipo de crédito 
+j. Micro_cr_dito_Lugar 
+k. Micro_cr_dito_Tipo 
+l. Micro_cr_dito_Ubicaci_n 
+m. meses domicilio 
+n. meses empleo 
+o. ocupaciÃ³n 
+p. TipoEmpleoSolicitante 
+q. EdoCiv 
+r. TipoComprobanteIngresos 
+s. TipoVivienda
+t. FrecuenciaPrecepcionIngresos
+ */
+
+
+/* SQL */
+
+PROC SQL;
+CREATE TABLE WORK.TEMPORAL AS
+SELECT 		D.CP,
+			D.CLIENTE,
+			F.
+FROM		ORIGINA.DEMOGRAFICOS AS D
+LEFT JOIN 	ORIGINA.FLAG_B_G AS F ON F.CLIENTE = D.CLIENTE;
+QUIT;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
