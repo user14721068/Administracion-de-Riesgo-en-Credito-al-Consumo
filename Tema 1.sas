@@ -1,7 +1,6 @@
 /* -------------------------------------------------------------------------------------------- */
-/* 06 FEBRERO 2025 */           
 
-/* Ejercicios video C1 */
+/* Ejercicios  C1 */
 
 /*Ejemplo*/
 /*Crear un par de tablas llamadas E1SQL y E1SAS en la base de datos WORK que contenga el id del cliente y 
@@ -42,9 +41,7 @@ run;
 /* -------------------------------------------------------------------------------------------- */
 
 
-/* 10 FEBRERO 2025 LUNES */
-
-/* Ejercicios video C2*/
+/* Ejercicios C2*/
 
 /* Crea una tabla en la base de datos work de nombre "E3SQL" que contenga todos los campos de la tabla solicitud
 pero solo con los registros cuyo monto solicitado sea mayor a 10,000 pesos utilizando codigo SQL */
@@ -107,8 +104,6 @@ RUN;
 
 
 /* --------------------------------------------------------------------------------------- */
-
-/* 11 FEBRERO 2025 */
 
 /*Ejercicios video c3*/
 
@@ -255,8 +250,6 @@ RUN;
 
 /* ----------------------------------------------------------------------------------------- */
 
-/* 12 FEBRERO 2025 */
-
 /* EJERCICIO VIDEO C4 */
 /*Crear un par de tablas de nombre E9SQL y E9SAS que contengan los siguientes campos:
 Cliente, Nombre, Apellido Paterno, Fecha de Nacimiento, Fecha en que se hizo la solicitud,
@@ -394,9 +387,7 @@ RUN;
 
 /* ----------------------------------------------------------------------------------------- */
 
-/* 2025 FEBRERO 13 */
-
-/* EJERCICIOS VIDEO C5 */
+/* EJERCICIOS  C5 */
 
 /* Generar un reporte R1SQL y R1SAS dentro de la BD work que resuma:
 ¿Cuántos clientes hay por nivel de estudio? */
@@ -702,8 +693,6 @@ RUN;
 
 
 /* --------------------------------------------------------------------------------------------- */
-
-/* 17 FEBRERO 2025 LUNES */
 
 /* EJERCICIO C6 */
 
