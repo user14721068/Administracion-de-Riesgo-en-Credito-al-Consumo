@@ -1,7 +1,6 @@
 /* -------------------------------------------------------------------------------------------- */
-/* 06 FEBRERO 2025 */           
 
-/* Ejercicios video C1 */
+/* Ejercicios C1 */
 
 /*Ejemplo*/
 /*Crear un par de tablas llamadas E1SQL y E1SAS en la base de datos WORK que contenga el id del cliente y 
@@ -40,9 +39,6 @@ run;
 
 
 /* -------------------------------------------------------------------------------------------- */
-
-
-/* 10 FEBRERO 2025 LUNES */
 
 /* Ejercicios video C2*/
 
@@ -107,8 +103,6 @@ RUN;
 
 
 /* --------------------------------------------------------------------------------------- */
-
-/* 11 FEBRERO 2025 */
 
 /*Ejercicios video c3*/
 
@@ -255,8 +249,6 @@ RUN;
 
 /* ----------------------------------------------------------------------------------------- */
 
-/* 12 FEBRERO 2025 */
-
 /* EJERCICIO VIDEO C4 */
 /*Crear un par de tablas de nombre E9SQL y E9SAS que contengan los siguientes campos:
 Cliente, Nombre, Apellido Paterno, Fecha de Nacimiento, Fecha en que se hizo la solicitud,
@@ -393,8 +385,6 @@ RUN;
 
 
 /* ----------------------------------------------------------------------------------------- */
-
-/* 2025 FEBRERO 13 */
 
 /* EJERCICIOS VIDEO C5 */
 
@@ -702,8 +692,6 @@ RUN;
 
 
 /* --------------------------------------------------------------------------------------------- */
-
-/* 17 FEBRERO 2025 LUNES */
 
 /* EJERCICIO C6 */
 
