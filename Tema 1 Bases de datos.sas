@@ -1,6 +1,5 @@
 /* -------------------------------------------------------------------------------------------- */
-
-/* Ejercicios C1 */
+/* 06 FEBRERO 2025 */           
 
 /*Ejemplo*/
 /*Crear un par de tablas llamadas E1SQL y E1SAS en la base de datos WORK que contenga el id del cliente y 
@@ -840,7 +839,7 @@ f. puesto solicitante 				ORIGINA.DEMOGRAFICOS PUESTO_SOLICITANTE
 g. contrato laboral 				ORIGINA.DEMOGRAFICOS CONTRATO_LABORAL
 h. sucursal 						ORIGINA.DEMOGRAFICOS SUCURSAL
 i. tipo de crédito 					ORIGINA.DEMOGRAFICOS TIPO_CR_DITO
-j. Micro_cr_dito_Lugar 
+j. Micro_cr_dito_Lugar 				ORIGINA.DEMOGRAFICOS MICRO_CR_DITO_LUGAR
 k. Micro_cr_dito_Tipo 
 l. Micro_cr_dito_Ubicaci_n 
 m. meses domicilio 
@@ -860,14 +859,15 @@ La tabla origina.flag_g_b es un subconjunto la tabla origina.aprobadas tales que
 A cada fila de la tabla tabla origina.flag_g_b le corresponde una sola fila de la tabla origina.demograficos
 */
 
+/* SOLUCION: PARA LA VARIABLE "PUESTO_SOLICITANTE" */
 
 /* SQL */
 PROC SQL;
 CREATE TABLE WORK.TEMPORAL AS
-SELECT 		COALESCEC(PUESTO_SOLICITANTE,'NULO'),
+SELECT 		COALESCEC(PUESTO_SOLICITANTE,'VALOR NULO') AS PUESTO_SOLICITANTE,
 			COUNT(D.CLIENTE) AS NRO_CLIENTES,
 			SUM(BAD) AS NRO_IMPAGOS,
-			100*(SUM(BAD) / COUNT(D.CLIENTE)) AS PCT_IMPAGOS
+			( SUM(BAD) / COUNT(D.CLIENTE) ) AS PCT_IMPAGOS
 FROM 		ORIGINA.DEMOGRAFICOS AS D
 INNER JOIN 	ORIGINA.APROBADAS AS A ON D.CLIENTE = A.CLIENTE
 INNER JOIN 	ORIGINA.FLAG_G_B AS F ON D.CLIENTE = F.CLIENTE
@@ -883,7 +883,7 @@ MERGE      ORIGINA.FLAG_G_B      (IN=F)
            ORIGINA.DEMOGRAFICOS  (IN=D)
            ORIGINA.APROBADAS     (IN=A)
            ORIGINA.SOLICITUD     (IN=S);
-           IF PUESTO_SOLICITANTE = "" THEN PUESTO_SOLICITANTE = 'NULO';
+           IF PUESTO_SOLICITANTE = "" THEN PUESTO_SOLICITANTE = 'VALOR NULO';
 BY         CLIENTE;
 IF         F;
 KEEP       PUESTO_SOLICITANTE CLIENTE BAD;
@@ -898,8 +898,22 @@ SUM(BAD)   = NRO_IMPAGOS
 MEAN(BAD)  = PCT_IMPAGOS;
 RUN;
 
+/* PENDIENTE: USANDO UNA ITERACION SOBRE LA LISTA DE VARIABLES */
 
-
+/* SQL */
+%let nombres = Ana Juan Maria Pedro; 				/* Lista de nombres */
+%macro procesar_nombres;
+    %let count = %sysfunc(countw(&nombres)); 		/* Cuenta el número de nombres */
+    %do i = 1 %to &count; 							/* Ciclo sobre cada nombre */
+        %let nombre_actual = %scan(&nombres, &i); 	/* Extrae el nombre actual */
+        
+        data WORK.dataset_&nombre_actual; 				/* Crea un dataset con el nombre actual */
+            nombre = "&nombre_actual";
+        run;
+        
+    %end;
+%mend procesar_nombres;
+%procesar_nombres; 									/* Ejecuta la macro */
 
 
 
