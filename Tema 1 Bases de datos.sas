@@ -981,3 +981,12 @@ RUN;
 %mend procesar_variables;									/* Fin de la macro */
 %procesar_variables; 										/* Ejecución de la macro */
 
+
+
+
+
+
+
+
+
+
