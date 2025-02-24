@@ -1,4 +1,6 @@
-/* -------------------------------------------------------------------------------------------- */      
+/* -------------------------------------------------------------------------------------------- */       
+
+/* Ejercicios C1 */
 
 /*Ejemplo*/
 /*Crear un par de tablas llamadas E1SQL y E1SAS en la base de datos WORK que contenga el id del cliente y 
@@ -829,26 +831,26 @@ donde se resuma cuántos clientes
 hay? Cuántos no pagaron su crédito? Y qué porcentaje
  de ellos no pagó su crédito? De las 
 siguientes variables: 
-a. código postal 					ORIGINA.DEMOGRAFICOS CP
-b. municipio 						ORIGINA.DEMOGRAFICOS MUNICIPIO
-c. estado  							ORIGINA.DEMOGRAFICOS ESTADO
-d. nivel de estudios 				ORIGINA.DEMOGRAFICOS NIVEL_ESTUDIOS
-e. actividad económica 				ORIGINA.DEMOGRAFICOS ACTIVIDAD
-f. puesto solicitante 				ORIGINA.DEMOGRAFICOS PUESTO_SOLICITANTE
-g. contrato laboral 				ORIGINA.DEMOGRAFICOS CONTRATO_LABORAL
-h. sucursal 						ORIGINA.DEMOGRAFICOS SUCURSAL
-i. tipo de crédito 					ORIGINA.DEMOGRAFICOS TIPO_CR_DITO
-j. Micro_cr_dito_Lugar 				ORIGINA.DEMOGRAFICOS MICRO_CR_DITO_LUGAR
-k. Micro_cr_dito_Tipo 
-l. Micro_cr_dito_Ubicaci_n 
-m. meses domicilio 
-n. meses empleo 
-o. ocupaciÃ³n 
-p. TipoEmpleoSolicitante 
-q. EdoCiv 
-r. TipoComprobanteIngresos 
-s. TipoVivienda
-t. FrecuenciaPrecepcionIngresos
+a. código postal 					ORIGINA.DEMOGRAFICOS.CP
+b. municipio 						ORIGINA.DEMOGRAFICOS.MUNICIPIO
+c. estado  							ORIGINA.DEMOGRAFICOS.ESTADO
+d. nivel de estudios 				ORIGINA.DEMOGRAFICOS.NIVEL_ESTUDIOS
+e. actividad económica 				ORIGINA.DEMOGRAFICOS.ACTIVIDAD
+f. puesto solicitante 				ORIGINA.DEMOGRAFICOS.PUESTO_SOLICITANTE
+g. contrato laboral 				ORIGINA.DEMOGRAFICOS.CONTRATO_LABORAL
+h. sucursal 						ORIGINA.DEMOGRAFICOS.SUCURSAL						TIPO NUM
+i. tipo de crédito 					ORIGINA.DEMOGRAFICOS.TIPO_CR_DITO
+j. Micro_cr_dito_Lugar 				ORIGINA.DEMOGRAFICOS.MICRO_CR_DITO_LUGAR
+k. Micro_cr_dito_Tipo               ORIGINA.DEMOGRAFICOS.MICRO_CR_DITO_TIPO
+l. Micro_cr_dito_Ubicaci_n          ORIGINA.DEMOGRAFICOS.MICRO_CR_DITO_UBICACI_N
+m. meses domicilio                  ORIGINA.DEMOGRAFICOS.MESES_DOM						TIPO NUM
+n. meses empleo                     ORIGINA.DEMOGRAFICOS.MESES_EMP						TIPO NUM
+o. ocupaciÃ³n                       ORIGINA.DEMOGRAFICOS.OCUPACION
+p. TipoEmpleoSolicitante            ORIGINA.DEMOGRAFICOS.TIPOEMPLEOSOLICITANTE
+q. EdoCiv                           ORIGINA.DEMOGRAFICOS.EDOCIV  
+r. TipoComprobanteIngresos          ORIGINA.DEMOGRAFICOS.TIPOCOMPROBANTEINGRESOS
+s. TipoVivienda                     ORIGINA.DEMOGRAFICOS.TIPOVIVIENDA
+t. FrecuenciaPrecepcionIngresos     ORIGINA.DEMOGRAFICOS.FRECUENCIAPRECEPCIONINGRESOS
  */
 
 
@@ -858,58 +860,124 @@ La tabla origina.flag_g_b es un subconjunto la tabla origina.aprobadas tales que
 A cada fila de la tabla tabla origina.flag_g_b le corresponde una sola fila de la tabla origina.demograficos
 */
 
-/* SOLUCION: PARA LA VARIABLE "PUESTO_SOLICITANTE" */
+
+/* Verificar si las variables son de tipo "num" o tipo "char" */
+PROC SQL;
+    CREATE TABLE WORK.TEMPORAL as
+    SELECT  name AS nombre_columna,
+    		type as tipo_columna
+    FROM 	dictionary.columns
+    WHERE 	libname = 'ORIGINA' AND memname = 'DEMOGRAFICOS';
+QUIT;
 
 /* SQL */
+/* SOLUCION PARA LA VARIABLE PUESTO_SOLICITANTE */
 PROC SQL;
 CREATE TABLE WORK.TEMPORAL AS
-SELECT 		COALESCEC(PUESTO_SOLICITANTE,'VALOR NULO') AS PUESTO_SOLICITANTE,
+SELECT 		COALESCEC(PUESTO_SOLICITANTE,"VALORES PERDIDOS") AS PUESTO_SOLICITANTE,  
+			/* COALESCE(SUCURSAL,9999) AS SUCURSAL */ /* PARA COLUMNAS NUMERICAS */
 			COUNT(D.CLIENTE) AS NRO_CLIENTES,
-			SUM(BAD) AS NRO_IMPAGOS,
-			( SUM(BAD) / COUNT(D.CLIENTE) ) AS PCT_IMPAGOS
+			SUM(BAD) AS NRO_MALOS,
+			( SUM(BAD) / COUNT(D.CLIENTE) ) AS PORCENTAJE_MALOS
 FROM 		ORIGINA.DEMOGRAFICOS AS D
-INNER JOIN 	ORIGINA.APROBADAS AS A ON D.CLIENTE = A.CLIENTE
 INNER JOIN 	ORIGINA.FLAG_G_B AS F ON D.CLIENTE = F.CLIENTE
-INNER JOIN 	ORIGINA.SOLICITUD AS S ON D.CLIENTE = S.CLIENTE
-WHERE 		A.ESTATUS="A"
 GROUP BY 	1
 ORDER BY 	4 DESC
 ;QUIT;
 
 /* SAS */
-DATA WORK.TEMPORAL;
+/* SOLUCION PARA LA VARIABLE TIPO_CR_DITO */
+DATA WORK.TEMPORAL;								
 MERGE      ORIGINA.FLAG_G_B      (IN=F)
-           ORIGINA.DEMOGRAFICOS  (IN=D)
-           ORIGINA.APROBADAS     (IN=A)
-           ORIGINA.SOLICITUD     (IN=S);
-           IF PUESTO_SOLICITANTE = "" THEN PUESTO_SOLICITANTE = 'VALOR NULO';
+           ORIGINA.DEMOGRAFICOS  (IN=D);
+           IF TIPO_CR_DITO = NULL THEN TIPO_CR_DITO = 'VALORES NULOS';
+           /* IF SUCURSAL = .  THEN SUCURSAL = 999; */  /* PARA COLUMNAS NUMERICAS */
 BY         CLIENTE;
-IF         F;
-KEEP       PUESTO_SOLICITANTE CLIENTE BAD;
+IF         F;									/* INDICA QUE ES UN LEFT JOIN SOBRE TABLA F */
+KEEP       TIPO_CR_DITO CLIENTE BAD;
 RUN;
 
-PROC SUMMARY DATA=WORK.TEMPORAL NWAY;
-CLASS      PUESTO_SOLICITANTE;
+PROC SUMMARY DATA=WORK.TEMPORAL NWAY;			/* Obtener el calculo de impagos y porcentajes */
+CLASS      TIPO_CR_DITO;
 VAR        CLIENTE BAD;
-OUTPUT OUT=WORK.R01SAS(DROP=_TYPE_ _FREQ_)
+OUTPUT OUT=WORK.TEMPORAL(DROP=_TYPE_ _FREQ_)
 N(CLIENTE) = NRO_CLIENTES
-SUM(BAD)   = NRO_IMPAGOS
-MEAN(BAD)  = PCT_IMPAGOS;
+SUM(BAD)   = NRO_MALOS
+MEAN(BAD)  = PORCENTAJE_MALOS;
 RUN;
 
-/* PENDIENTE: USANDO UNA ITERACION SOBRE LA LISTA DE VARIABLES */
+PROC SORT DATA=WORK.TEMPORAL OUT=WORK.TEMPORAL;	/* Ordenar por el porcentaje de impagos */
+BY DESCENDING PORCENTAJE_MALOS;
+RUN;
+
+/* EJEMPLO: CICLO SOBRE UNA LISTA DE VARIABLES PARA CREAR DATASETS CON NOMBRE VARIABLE */
 
 /* SQL */
-%let nombres = Ana Juan Maria Pedro; 				/* Lista de nombres */
+%let nombres = Juan Pedro Manuel; 					/* Lista de nombres */
 %macro procesar_nombres;
     %let count = %sysfunc(countw(&nombres)); 		/* Cuenta el número de nombres */
     %do i = 1 %to &count; 							/* Ciclo sobre cada nombre */
         %let nombre_actual = %scan(&nombres, &i); 	/* Extrae el nombre actual */
-        
-        data WORK.dataset_&nombre_actual; 				/* Crea un dataset con el nombre actual */
+        data WORK.dataset_&nombre_actual&i; 		/* Crea un dataset con el nombre actual */
             nombre = "&nombre_actual";
         run;
-        
     %end;
 %mend procesar_nombres;
 %procesar_nombres; 									/* Ejecuta la macro */
+
+
+/* SQL */
+/* SOLUCION PARA TODAS LAS VARIABLES */
+%let variables = CP MUNICIPIO ESTADO NIVEL_ESTUDIOS ACTIVIDAD PUESTO_SOLICITANTE CONTRATO_LABORAL SUCURSAL TIPO_CR_DITO MICRO_CR_DITO_LUGAR MICRO_CR_DITO_TIPO MICRO_CR_DITO_UBICACI_N MESES_DOM MESES_EMP OCUPACION TIPOEMPLEOSOLICITANTE EDOCIV TIPOCOMPROBANTEINGRESOS TIPOVIVIENDA FRECUENCIAPRECEPCIONINGRESOS;	 	
+%macro procesar_variables;
+    %let count = %sysfunc(countw(&variables)); 		  				/* Cuenta el número de variables */
+    %do i = 1 %to &count; 							    			/* Ciclo sobre cada variable */
+        %let variable_actual = %scan(&variables, &i);   			/* Extraer el nombre de la variable actual */
+       	%let variable_truncada = %substr(&variable_actual, 1, 23); 	/* Truncar el nombre de la variable a 23 caracteres */
+       	%let name_dataset = WORK.R&i._SQL_&variable_truncada;		/* Concatenar texto y macro variable. Notemos que se concatena el contador i con la cadena "_SQL_" usando el caracter "." */
+			proc sql noprint;										/* Extraer el tipo de variable y guardar en tipo_columna */
+			    select type
+			    into :tipo_columna
+			    from dictionary.columns
+			    where libname = 'ORIGINA' and memname = 'DEMOGRAFICOS' and upcase(name) = "&variable_actual";
+			quit;
+			%put La columna &variable_actual es de tipo &tipo_columna;
+																		
+	        %if &tipo_columna = char %then %do;				/* Si la variable es char usar COALESCEC */
+		        %put La variable es char, usar COALESCEC;
+		       	PROC SQL NOPRINT;							/* PROC SQL para crear los datasets */   	
+				CREATE TABLE &name_dataset AS																
+				SELECT 		COALESCEC(&variable_actual,'VALORES NULOS') AS &variable_actual,			
+							COUNT(D.CLIENTE) AS NRO_CLIENTES,												
+							SUM(BAD) AS NRO_IMPAGOS,														
+							( SUM(BAD) / COUNT(D.CLIENTE) ) AS PORCENTAJE_IMPAGOS						
+				FROM 		ORIGINA.DEMOGRAFICOS AS D													
+				INNER JOIN 	ORIGINA.APROBADAS AS A ON D.CLIENTE = A.CLIENTE								
+				INNER JOIN 	ORIGINA.FLAG_G_B AS F ON D.CLIENTE = F.CLIENTE								
+				INNER JOIN 	ORIGINA.SOLICITUD AS S ON D.CLIENTE = S.CLIENTE								
+				WHERE 		A.ESTATUS="A"																
+				GROUP BY 	1																				
+				ORDER BY 	4 DESC;																			
+				QUIT;	
+			%end;
+		    %else %if &tipo_columna = num %then %do;		/* Si la variable es num usar COALESCE */
+		        %put La variable es num, usar COALESCE;
+		        PROC SQL NOPRINT;						  	/* PROC SQL para crear los datasets */   	
+				CREATE TABLE &name_dataset AS																
+				SELECT 		COALESCE(&variable_actual,9999) AS &variable_actual,			
+							COUNT(D.CLIENTE) AS NRO_CLIENTES,												
+							SUM(BAD) AS NRO_IMPAGOS,														
+							( SUM(BAD) / COUNT(D.CLIENTE) ) AS PORCENTAJE_IMPAGOS						
+				FROM 		ORIGINA.DEMOGRAFICOS AS D													
+				INNER JOIN 	ORIGINA.APROBADAS AS A ON D.CLIENTE = A.CLIENTE								
+				INNER JOIN 	ORIGINA.FLAG_G_B AS F ON D.CLIENTE = F.CLIENTE								
+				INNER JOIN 	ORIGINA.SOLICITUD AS S ON D.CLIENTE = S.CLIENTE								
+				WHERE 		A.ESTATUS="A"																
+				GROUP BY 	1																				
+				ORDER BY 	4 DESC;																			
+				QUIT;
+		    %end;																
+    %end;													/* Fin del loop */
+%mend procesar_variables;									/* Fin de la macro */
+%procesar_variables; 										/* Ejecución de la macro */
+
