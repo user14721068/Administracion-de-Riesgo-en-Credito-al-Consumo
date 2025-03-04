@@ -1,6 +1,6 @@
 /* -------------------------------------------------------------------------------------------- */    
 
-/* Ejercicios video C1 */
+/* Ejercicios C1 */
 
 /*Ejemplo*/
 /*Crear un par de tablas llamadas E1SQL y E1SAS en la base de datos WORK que contenga el id del cliente y 
@@ -41,7 +41,7 @@ run;
 /* -------------------------------------------------------------------------------------------- */
 
 
-/* Ejercicios video C2*/
+/* Ejercicios C2*/
 
 /* Crea una tabla en la base de datos work de nombre "E3SQL" que contenga todos los campos de la tabla solicitud
 pero solo con los registros cuyo monto solicitado sea mayor a 10,000 pesos utilizando codigo SQL */
@@ -105,7 +105,7 @@ RUN;
 
 /* --------------------------------------------------------------------------------------- */
 
-/*Ejercicios video c3*/
+/*Ejercicios c3*/
 
 /* Crea una tabla en al bd work de nombre E5SQL que contenga 
 los campos de cliente, sexo, estado, ingreso fijo,
@@ -250,7 +250,7 @@ RUN;
 
 /* ----------------------------------------------------------------------------------------- */
 
-/* EJERCICIO VIDEO C4 */
+/* EJERCICIO C4 */
 /*Crear un par de tablas de nombre E9SQL y E9SAS que contengan los siguientes campos:
 Cliente, Nombre, Apellido Paterno, Fecha de Nacimiento, Fecha en que se hizo la solicitud,
 Edad, Ingreso Total. Aplicando los siguienes filtros: Ingreso Total > 10000 y Edad > 24*/
@@ -387,7 +387,7 @@ RUN;
 
 /* ----------------------------------------------------------------------------------------- */
 
-/* EJERCICIOS VIDEO C5 */
+/* EJERCICIOS C5 */
 
 /* Generar un reporte R1SQL y R1SAS dentro de la BD work que resuma:
 ¿Cuántos clientes hay por nivel de estudio? */
