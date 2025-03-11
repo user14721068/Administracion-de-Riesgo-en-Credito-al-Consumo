@@ -1,6 +1,5 @@
-/* -------------------------------------------------------------------------------------------- */    
-
-/* Ejercicios C1 */
+/* ---------------------------------------------------------------------------------------------------------------------------------- */
+/* Ejercicios c1 */
 
 /*Ejemplo*/
 /*Crear un par de tablas llamadas E1SQL y E1SAS en la base de datos WORK que contenga el id del cliente y 
@@ -38,10 +37,9 @@ keep Cliente ApPaterno_Solic;
 run;
 
 
-/* -------------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------------------------------------------- */
 
-
-/* Ejercicios C2*/
+/* Ejercicios video C2*/
 
 /* Crea una tabla en la base de datos work de nombre "E3SQL" que contenga todos los campos de la tabla solicitud
 pero solo con los registros cuyo monto solicitado sea mayor a 10,000 pesos utilizando codigo SQL */
@@ -103,11 +101,11 @@ RUN;
 
 
 
-/* --------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------------------------------------------- */
 
-/*Ejercicios c3*/
+/*Ejercicios video c3*/
 
-/* Crea una tabla en al bd work de nombre E5SQL que contenga 
+/* Crea una tabla en la bd work de nombre E5SQL que contenga 
 los campos de cliente, sexo, estado, ingreso fijo,
 ingreso variable, construye un campo nuevo que se llame 
 ingreso total, sumando ambos ingresos y quedate solo con 
@@ -248,9 +246,9 @@ IF PERIODICIDAD = "Quincenal";
 RUN;
 
 
-/* ----------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------------------------------------------- */
 
-/* EJERCICIO C4 */
+/* EJERCICIO VIDEO C4 */
 /*Crear un par de tablas de nombre E9SQL y E9SAS que contengan los siguientes campos:
 Cliente, Nombre, Apellido Paterno, Fecha de Nacimiento, Fecha en que se hizo la solicitud,
 Edad, Ingreso Total. Aplicando los siguienes filtros: Ingreso Total > 10000 y Edad > 24*/
@@ -385,9 +383,9 @@ IF			EDAD > 24;
 RUN;
 
 
-/* ----------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------------------------------------------- */
 
-/* EJERCICIOS C5 */
+/* EJERCICIOS VIDEO C5 */
 
 /* Generar un reporte R1SQL y R1SAS dentro de la BD work que resuma:
 ¿Cuántos clientes hay por nivel de estudio? */
@@ -692,7 +690,7 @@ RUN;
 
 
 
-/* --------------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------------------------------------------- */
 
 /* EJERCICIO C6 */
 
@@ -706,7 +704,7 @@ SELECT 	W.RANGO_EDAD,
 		COUNT(W.CLIENTE) AS CLIENTES,
 		AVG(W.INGRESO_TOTAL) AS INGRESO_PROM
 FROM
-( /* ******************************** W **************************** */
+( 
 SELECT 	Z.CLIENTE,
 		Z.EDAD,
 		CASE 	WHEN Z.EDAD >= 18 AND Z.EDAD < 23 THEN "18-23"
@@ -721,15 +719,15 @@ SELECT 	Z.CLIENTE,
 				WHEN Z.EDAD >= 68 AND Z.EDAD < 73 THEN "68-73" END AS RANGO_EDAD,
 		Z.INGRESO_TOTAL
 FROM
-( /* ******************************** Z **************************** */
+( 
 SELECT 		D.CLIENTE,
 			D.INGRESO_FIJO + D.INGRESO_VARIABLE AS INGRESO_TOTAL,
 			INTCK("YEAR",D.FECHA_NACIMIENTO,S.FECHA_SOLICITUD) AS EDAD
 FROM 		ORIGINA.DEMOGRAFICOS AS D
 LEFT JOIN	ORIGINA.SOLICITUD AS S ON D.CLIENTE=S.CLIENTE
 WHERE  		D.SEXO = "M"
-) AS Z /* *************************** Z **************************** */
-) AS W /* *************************** W **************************** */
+) AS Z 
+) AS W 
 GROUP 1
 ;QUIT;
 
@@ -781,21 +779,21 @@ SELECT 		RANGO_INGRESO,
 			COUNT(CLIENTE) AS NRO_CLIENTES,
 			AVG(EDAD) AS EDAD_PROMEDIO 
 FROM
-(       /*************************** Z *****************************************/
-SELECT 		INGRESO_FIJO + INGRESO_VARIABLE AS INGRESO_TOTAL,
-			CASE
-			WHEN (INGRESO_FIJO + INGRESO_VARIABLE) >= 0     AND (INGRESO_FIJO + INGRESO_VARIABLE) < 1000  THEN "0      a 1,000"
-			WHEN (INGRESO_FIJO + INGRESO_VARIABLE) >= 1000  AND (INGRESO_FIJO + INGRESO_VARIABLE) < 5000  THEN "1,000  a 5,000"
-			WHEN (INGRESO_FIJO + INGRESO_VARIABLE) >= 5000  AND (INGRESO_FIJO + INGRESO_VARIABLE) < 10000 THEN "5,000  a 10,000"
-			WHEN (INGRESO_FIJO + INGRESO_VARIABLE) >= 10000 AND (INGRESO_FIJO + INGRESO_VARIABLE) < 90000 THEN "10,000 a 90,000"
-			WHEN (INGRESO_FIJO + INGRESO_VARIABLE) >= 90000                                               THEN "90,000 a MÁS"
-			END AS RANGO_INGRESO,
-			D.CLIENTE,
-			INTCK('YEAR',D.FECHA_NACIMIENTO,S.FECHA_SOLICITUD) AS EDAD
-FROM 		ORIGINA.DEMOGRAFICOS AS D
-LEFT JOIN	ORIGINA.SOLICITUD AS S ON D.CLIENTE=S.CLIENTE
-WHERE 		D.SEXO = "F"
-) AS Z  /*************************** Z *****************************************/
+(       
+	SELECT 		INGRESO_FIJO + INGRESO_VARIABLE AS INGRESO_TOTAL,
+				CASE
+				WHEN (INGRESO_FIJO + INGRESO_VARIABLE) >= 0     AND (INGRESO_FIJO + INGRESO_VARIABLE) < 1000  THEN "Rango 1  0      a 1,000"
+				WHEN (INGRESO_FIJO + INGRESO_VARIABLE) >= 1000  AND (INGRESO_FIJO + INGRESO_VARIABLE) < 5000  THEN "Rango 2  1,000  a 5,000"
+				WHEN (INGRESO_FIJO + INGRESO_VARIABLE) >= 5000  AND (INGRESO_FIJO + INGRESO_VARIABLE) < 10000 THEN "Rango 3  5,000  a 10,000"
+				WHEN (INGRESO_FIJO + INGRESO_VARIABLE) >= 10000 AND (INGRESO_FIJO + INGRESO_VARIABLE) < 90000 THEN "Rango 4  10,000 a 90,000"
+				WHEN (INGRESO_FIJO + INGRESO_VARIABLE) >= 90000                                               THEN "Rango 5  90,000 a MÁS"
+				END AS RANGO_INGRESO,
+				D.CLIENTE,
+				INTCK('YEAR',D.FECHA_NACIMIENTO,S.FECHA_SOLICITUD) AS EDAD
+	FROM 		ORIGINA.DEMOGRAFICOS AS D
+	LEFT JOIN	ORIGINA.SOLICITUD AS S ON D.CLIENTE=S.CLIENTE
+	WHERE 		D.SEXO = "F"
+) AS Z  
 GROUP BY 1;
 QUIT;
 
@@ -806,11 +804,11 @@ MERGE 	ORIGINA.DEMOGRAFICOS 	(IN=D)
 		ORIGINA.SOLICITUD 		(IN=S);
 		INGRESO_TOTAL = INGRESO_FIJO + INGRESO_VARIABLE;
 		EDAD = INTCK('YEAR',FECHA_NACIMIENTO,FECHA_SOLICITUD);
-		IF INGRESO_TOTAL >= 0     AND INGRESO_TOTAL < 1000  THEN RANGO_INGRESO="0      a 1,000";
-		IF INGRESO_TOTAL >= 1000  AND INGRESO_TOTAL < 5000  THEN RANGO_INGRESO="1,000  a 5,000";
-		IF INGRESO_TOTAL >= 5000  AND INGRESO_TOTAL < 10000 THEN RANGO_INGRESO="5,000  a 10,000";
-		IF INGRESO_TOTAL >= 10000 AND INGRESO_TOTAL < 90000 THEN RANGO_INGRESO="10,000 a 90,000";
-		IF INGRESO_TOTAL >= 90000                           THEN RANGO_INGRESO="90,000 a MÁS";
+		IF INGRESO_TOTAL >= 0     AND INGRESO_TOTAL < 1000  THEN RANGO_INGRESO="Rango 1   0      a 1,000";
+		IF INGRESO_TOTAL >= 1000  AND INGRESO_TOTAL < 5000  THEN RANGO_INGRESO="Rango 2   1,000  a 5,000";
+		IF INGRESO_TOTAL >= 5000  AND INGRESO_TOTAL < 10000 THEN RANGO_INGRESO="Rango 3   5,000  a 10,000";
+		IF INGRESO_TOTAL >= 10000 AND INGRESO_TOTAL < 90000 THEN RANGO_INGRESO="Rango 4   10,000 a 90,000";
+		IF INGRESO_TOTAL >= 90000                           THEN RANGO_INGRESO="Rango 5   90,000 a MÁS";
 BY		CLIENTE;
 KEEP	INGRESO_TOTAL RANGO_INGRESO CLIENTE EDAD;
 IF		SEXO="F";
@@ -824,14 +822,57 @@ N(CLIENTE) = NRO_CLIENTES
 MEAN(EDAD) = EDAD_PROMEDIO;
 RUN;
 
+/* ---------------------------------------------------------------------------------------------------------------------------------- */
 
-/* Tarea 1 Parte 2 
+/* Tarea 1 Parte 2 inciso i) variable tipo_cr_dito */
+/* Crear un reporte Rn_SQL_variable y Rn_SAS_variable donde se resuma: 
+-¿Cuántos clientes hay? 
+-¿Cuántos no pagaron su crédito? 
+-¿Qué porcentaje de ellos no pagó su crédito? 
+De las siguientes variables: 
+i. tipo de crédito 					ORIGINA.DEMOGRAFICOS.TIPO_CR_DITO */
+
+/* CODIGO SQL */
+PROC SQL;
+CREATE TABLE WORK.TEMPORAL AS
+SELECT 		COALESCEC(D.TIPO_CR_DITO, "NA") AS TIPO_CR_DITO,
+			COUNT(D.CLIENTE) AS NRO_CLIENTES,
+			SUM(F.BAD) AS BADS,
+			SUM(F.BAD) / COUNT(D.CLIENTE) AS PORCENTAJE_BADS
+FROM		ORIGINA.DEMOGRAFICOS AS D
+INNER JOIN 	ORIGINA.FLAG_G_B AS F ON D.CLIENTE = F.CLIENTE
+GROUP BY 1
+ORDER BY PORCENTAJE_BADS DESC;
+QUIT;
+
+
+/* CODIGO SAS */
+DATA WORK.TEMPORAL;
+MERGE 	ORIGINA.DEMOGRAFICOS 	(IN=D)
+		ORIGINA.FLAG_G_B 		(IN=F);
+IF TIPO_CR_DITO = NULL THEN TIPO_CR_DITO = 'NA';
+KEEP	CLIENTE TIPO_CR_DITO BAD;
+BY		CLIENTE;
+IF		F;
+RUN;
+
+PROC SUMMARY DATA=WORK.TEMPORAL NWAY;
+CLASS TIPO_CR_DITO;
+VAR CLIENTE BAD;
+OUTPUT OUT = WORK.TEMPORAL(DROP=_TYPE_ _FREQ_ )
+N(CLIENTE) = CLIENTES
+SUM(BAD) = BADS
+MEAN(BAD) = PORCENTAJE_BADS;
+RUN;
+
+
+
+/* ---------------------------------------------------------------------------------------------------------------------------------- */
+
+/* TAREA 1 PARTE 2
 Generar el código SAS y SQL de los siguientes ejercicios:
-1. Crear un reporte Rn_SQL_variable y Rn_SAS_variable 
-donde se resuma cuántos clientes 
-hay? Cuántos no pagaron su crédito? Y qué porcentaje
- de ellos no pagó su crédito? De las 
-siguientes variables: 
+1. Crear un reporte Rn_SQL_variable y Rn_SAS_variable donde se resuma cuántos clientes hay? Cuántos no pagaron su crédito? 
+Y qué porcentaje de ellos no pagó su crédito? De las siguientes variables: 
 a. código postal 					ORIGINA.DEMOGRAFICOS.CP
 b. municipio 						ORIGINA.DEMOGRAFICOS.MUNICIPIO
 c. estado  							ORIGINA.DEMOGRAFICOS.ESTADO
@@ -839,13 +880,13 @@ d. nivel de estudios 				ORIGINA.DEMOGRAFICOS.NIVEL_ESTUDIOS
 e. actividad económica 				ORIGINA.DEMOGRAFICOS.ACTIVIDAD
 f. puesto solicitante 				ORIGINA.DEMOGRAFICOS.PUESTO_SOLICITANTE
 g. contrato laboral 				ORIGINA.DEMOGRAFICOS.CONTRATO_LABORAL
-h. sucursal 						ORIGINA.DEMOGRAFICOS.SUCURSAL						TIPO NUM
+h. sucursal 						ORIGINA.DEMOGRAFICOS.SUCURSAL						TIPO NUMERICO
 i. tipo de crédito 					ORIGINA.DEMOGRAFICOS.TIPO_CR_DITO
 j. Micro_cr_dito_Lugar 				ORIGINA.DEMOGRAFICOS.MICRO_CR_DITO_LUGAR
 k. Micro_cr_dito_Tipo               ORIGINA.DEMOGRAFICOS.MICRO_CR_DITO_TIPO
 l. Micro_cr_dito_Ubicaci_n          ORIGINA.DEMOGRAFICOS.MICRO_CR_DITO_UBICACI_N
-m. meses domicilio                  ORIGINA.DEMOGRAFICOS.MESES_DOM						TIPO NUM
-n. meses empleo                     ORIGINA.DEMOGRAFICOS.MESES_EMP						TIPO NUM
+m. meses domicilio                  ORIGINA.DEMOGRAFICOS.MESES_DOM						TIPO NUMERICO
+n. meses empleo                     ORIGINA.DEMOGRAFICOS.MESES_EMP						TIPO NUMERICO
 o. ocupaciÃ³n                       ORIGINA.DEMOGRAFICOS.OCUPACION
 p. TipoEmpleoSolicitante            ORIGINA.DEMOGRAFICOS.TIPOEMPLEOSOLICITANTE
 q. EdoCiv                           ORIGINA.DEMOGRAFICOS.EDOCIV  
@@ -862,7 +903,7 @@ A cada fila de la tabla tabla origina.flag_g_b le corresponde una sola fila de l
 */
 
 
-/* Verificar si las variables son de tipo "num" o tipo "char" */
+/* Veamos cuáles variables son de tipo "num" y cuales son tipo "char" */
 PROC SQL;
     CREATE TABLE WORK.TEMPORAL as
     SELECT  name AS nombre_columna,
@@ -875,11 +916,11 @@ QUIT;
 /* SOLUCION PARA LA VARIABLE PUESTO_SOLICITANTE */
 PROC SQL;
 CREATE TABLE WORK.TEMPORAL AS
-SELECT 		COALESCEC(PUESTO_SOLICITANTE,"VALORES PERDIDOS") AS PUESTO_SOLICITANTE,  
-			/* COALESCE(SUCURSAL,9999) AS SUCURSAL */ /* PARA COLUMNAS NUMERICAS */
-			COUNT(D.CLIENTE) AS NRO_CLIENTES,
-			SUM(BAD) AS NRO_MALOS,
-			( SUM(BAD) / COUNT(D.CLIENTE) ) AS PORCENTAJE_MALOS
+SELECT 		COALESCEC(PUESTO_SOLICITANTE,"NA") AS PUESTO_SOLICITANTE,  				/* PARA COLUMNAS TIPO CHAR */
+			/* COALESCE(SUCURSAL,9999) AS SUCURSAL */      							/* PARA COLUMNAS TIPO NUM  */
+			COUNT(D.CLIENTE) AS CLIENTES,
+			SUM(BAD) AS BADS,
+			( SUM(BAD) / COUNT(D.CLIENTE) ) AS PORCENTAJE_BADS
 FROM 		ORIGINA.DEMOGRAFICOS AS D
 INNER JOIN 	ORIGINA.FLAG_G_B AS F ON D.CLIENTE = F.CLIENTE
 GROUP BY 	1
@@ -891,51 +932,50 @@ ORDER BY 	4 DESC
 DATA WORK.TEMPORAL;								
 MERGE      ORIGINA.FLAG_G_B      (IN=F)
            ORIGINA.DEMOGRAFICOS  (IN=D);
-           IF TIPO_CR_DITO = NULL THEN TIPO_CR_DITO = 'VALORES NULOS';
-           /* IF SUCURSAL = .  THEN SUCURSAL = 999; */  /* PARA COLUMNAS NUMERICAS */
+           IF TIPO_CR_DITO = NULL THEN TIPO_CR_DITO = 'NA';			/* PARA COLUMNAS TIPO CHAR */
+           /* IF SUCURSAL = .  THEN SUCURSAL = 999; */  			/* PARA COLUMNAS TIPO NUM  */
 BY         CLIENTE;
-IF         F;									/* INDICA QUE ES UN LEFT JOIN SOBRE TABLA F */
+IF         F;														/* INDICA QUE ES UN LEFT JOIN SOBRE TABLA F */
 KEEP       TIPO_CR_DITO CLIENTE BAD;
 RUN;
 
-PROC SUMMARY DATA=WORK.TEMPORAL NWAY;			/* Obtener el calculo de impagos y porcentajes */
+PROC SUMMARY DATA=WORK.TEMPORAL NWAY;								/* Obtener el numero y porcentaje de bads */
 CLASS      TIPO_CR_DITO;
 VAR        CLIENTE BAD;
-OUTPUT OUT=WORK.TEMPORAL(DROP=_TYPE_ _FREQ_)
-N(CLIENTE) = NRO_CLIENTES
-SUM(BAD)   = NRO_MALOS
-MEAN(BAD)  = PORCENTAJE_MALOS;
+OUTPUT OUT = WORK.TEMPORAL(DROP=_TYPE_ _FREQ_)
+N(CLIENTE) = CLIENTES
+SUM(BAD)   = BADS
+MEAN(BAD)  = PORCENTAJE_BADS;
 RUN;
 
-PROC SORT DATA=WORK.TEMPORAL OUT=WORK.TEMPORAL;	/* Ordenar por el porcentaje de impagos */
-BY DESCENDING PORCENTAJE_MALOS;
+PROC SORT DATA=WORK.TEMPORAL OUT=WORK.TEMPORAL;						/* Ordenar por el porcentaje de bads */
+BY DESCENDING PORCENTAJE_BADS;
 RUN;
 
 /* EJEMPLO: CICLO SOBRE UNA LISTA DE VARIABLES PARA CREAR DATASETS CON NOMBRE VARIABLE */
-
-/* SQL */
-%let nombres = Juan Pedro Manuel; 					/* Lista de nombres */
-%macro procesar_nombres;
-    %let count = %sysfunc(countw(&nombres)); 		/* Cuenta el número de nombres */
+%let nombres = A B C; 					/* Lista de nombres */
+%macro procesar_nombres;							/* Declarar la macro */
+    %let count = %sysfunc(countw(&nombres)); 		/* Contar el número de nombres */
     %do i = 1 %to &count; 							/* Ciclo sobre cada nombre */
         %let nombre_actual = %scan(&nombres, &i); 	/* Extrae el nombre actual */
-        data WORK.dataset_&nombre_actual&i; 		/* Crea un dataset con el nombre actual */
+        data WORK.dataset_&nombre_actual&i; 		/* Crea un dataset con el nombre actual en la librería work */
             nombre = "&nombre_actual";
-        run;
-    %end;
-%mend procesar_nombres;
+        run;										/* Fin del paso data */
+    %end;											/* Fin del ciclo */
+%mend procesar_nombres;								/* Fin de la macro */
 %procesar_nombres; 									/* Ejecuta la macro */
 
 
-/* SQL */
-/* SOLUCION PARA TODAS LAS VARIABLES */
+/* CODIGO SQL */
 %let variables = CP MUNICIPIO ESTADO NIVEL_ESTUDIOS ACTIVIDAD PUESTO_SOLICITANTE CONTRATO_LABORAL SUCURSAL TIPO_CR_DITO MICRO_CR_DITO_LUGAR MICRO_CR_DITO_TIPO MICRO_CR_DITO_UBICACI_N MESES_DOM MESES_EMP OCUPACION TIPOEMPLEOSOLICITANTE EDOCIV TIPOCOMPROBANTEINGRESOS TIPOVIVIENDA FRECUENCIAPRECEPCIONINGRESOS;	 	
+%let incisos   = a b c d e f g h i j k l m n o p q r s t;	 	
 %macro procesar_variables;
     %let count = %sysfunc(countw(&variables)); 		  				/* Cuenta el número de variables */
     %do i = 1 %to &count; 							    			/* Ciclo sobre cada variable */
         %let variable_actual = %scan(&variables, &i);   			/* Extraer el nombre de la variable actual */
+       	%let inciso          = %scan(&incisos,   &i);   			/* Extraer el nombre del inciso actual */
        	%let variable_truncada = %substr(&variable_actual, 1, 23); 	/* Truncar el nombre de la variable a 23 caracteres */
-       	%let name_dataset = WORK.R&i._SQL_&variable_truncada;		/* Concatenar texto y macro variable. Notemos que se concatena el contador i con la cadena "_SQL_" usando el caracter "." */
+       	%let name_dataset = WORK.R&inciso._SQL_&variable_truncada;	/* Concatenar texto y macro variable. Se concatena la macro variable "inciso" con la cadena "_SQL_" usando el caracter "." */
 			proc sql noprint;										/* Extraer el tipo de variable y guardar en tipo_columna */
 			    select type
 			    into :tipo_columna
@@ -948,10 +988,10 @@ RUN;
 		        %put La variable es char, usar COALESCEC;
 		       	PROC SQL NOPRINT;							/* PROC SQL para crear los datasets */   	
 				CREATE TABLE &name_dataset AS																
-				SELECT 		COALESCEC(&variable_actual,'VALORES NULOS') AS &variable_actual,			
-							COUNT(D.CLIENTE) AS NRO_CLIENTES,												
-							SUM(BAD) AS NRO_IMPAGOS,														
-							( SUM(BAD) / COUNT(D.CLIENTE) ) AS PORCENTAJE_IMPAGOS						
+				SELECT 		COALESCEC(&variable_actual,'NA') AS &variable_actual,			
+							COUNT(D.CLIENTE) AS CLIENTES,												
+							SUM(BAD) AS BADS,														
+							( SUM(BAD) / COUNT(D.CLIENTE) ) AS PORCENTAJE_BADS						
 				FROM 		ORIGINA.DEMOGRAFICOS AS D													
 				INNER JOIN 	ORIGINA.APROBADAS AS A ON D.CLIENTE = A.CLIENTE								
 				INNER JOIN 	ORIGINA.FLAG_G_B AS F ON D.CLIENTE = F.CLIENTE								
@@ -966,9 +1006,9 @@ RUN;
 		        PROC SQL NOPRINT;						  	/* PROC SQL para crear los datasets */   	
 				CREATE TABLE &name_dataset AS																
 				SELECT 		COALESCE(&variable_actual,9999) AS &variable_actual,			
-							COUNT(D.CLIENTE) AS NRO_CLIENTES,												
-							SUM(BAD) AS NRO_IMPAGOS,														
-							( SUM(BAD) / COUNT(D.CLIENTE) ) AS PORCENTAJE_IMPAGOS						
+							COUNT(D.CLIENTE) AS CLIENTES,												
+							SUM(BAD) AS BADS,														
+							( SUM(BAD) / COUNT(D.CLIENTE) ) AS PORCENTAJE_BADS						
 				FROM 		ORIGINA.DEMOGRAFICOS AS D													
 				INNER JOIN 	ORIGINA.APROBADAS AS A ON D.CLIENTE = A.CLIENTE								
 				INNER JOIN 	ORIGINA.FLAG_G_B AS F ON D.CLIENTE = F.CLIENTE								
@@ -983,141 +1023,554 @@ RUN;
 %procesar_variables; 										/* Ejecución de la macro */
 
 
-/* --------------------------------------------------------------------------------------------- */
 
-/* TAREA 1 PARTE 2 SOLUCION INCISO I) TIPO_CR_DITO */
+/* CODIGO SAS */
+%let variables = CP MUNICIPIO ESTADO NIVEL_ESTUDIOS ACTIVIDAD PUESTO_SOLICITANTE CONTRATO_LABORAL SUCURSAL TIPO_CR_DITO MICRO_CR_DITO_LUGAR MICRO_CR_DITO_TIPO MICRO_CR_DITO_UBICACI_N MESES_DOM MESES_EMP OCUPACION TIPOEMPLEOSOLICITANTE EDOCIV TIPOCOMPROBANTEINGRESOS TIPOVIVIENDA FRECUENCIAPRECEPCIONINGRESOS;	 	
+%let incisos   = a b c d e f g h i j k l m n o p q r s t;	 	
+%macro procesar_variables;
+    %let count = %sysfunc(countw(&variables)); 		  				/* Cuenta el número de variables */
+    %do i = 1 %to &count; 							    			/* Ciclo sobre cada variable */
+        %let variable_actual = %scan(&variables, &i);   			/* Extraer el nombre de la variable actual */
+       	%let inciso          = %scan(&incisos,   &i);   			/* Extraer el nombre del inciso actual */
+       	%let variable_truncada = %substr(&variable_actual, 1, 23); 	/* Truncar el nombre de la variable a 23 caracteres */
+       	%let name_dataset = WORK.R&inciso._SAS_&variable_truncada;	/* Concatenar texto y macro variable. Se concatena la macro variable "inciso" con la cadena "_SQL_" usando el caracter "." */
+			proc sql noprint;										/* Extraer el tipo de variable y guardar en tipo_columna */
+			    select type
+			    into :tipo_columna
+			    from dictionary.columns
+			    where libname = 'ORIGINA' and memname = 'DEMOGRAFICOS' and upcase(name) = "&variable_actual";
+			quit;
+			%put La columna &variable_actual es de tipo &tipo_columna;
+																		
+	        %if &tipo_columna = char %then %do;														/* Si la variable es char usar COALESCEC */
+		        %put La variable es char, usar COALESCEC;
+						DATA WORK.TEMPORAL;								
+						MERGE      ORIGINA.FLAG_G_B      (IN=F)
+						           ORIGINA.DEMOGRAFICOS  (IN=D);
+						           IF &variable_actual = NULL THEN &variable_actual = 'NA';			/* PARA COLUMNAS TIPO CHAR */
+						           /* IF SUCURSAL = .  THEN SUCURSAL = 999; */  					/* PARA COLUMNAS TIPO NUM  */
+						BY         CLIENTE;
+						IF         F;																/* INDICA QUE ES UN LEFT JOIN SOBRE TABLA F */
+						KEEP       &variable_actual CLIENTE BAD;
+						RUN;
+						
+						PROC SUMMARY DATA=WORK.TEMPORAL NWAY;										/* Obtener el numero y porcentaje de bads */
+						CLASS      &variable_actual;
+						VAR        CLIENTE BAD;
+						OUTPUT OUT = WORK.TEMPORAL(DROP=_TYPE_ _FREQ_)
+						N(CLIENTE) = CLIENTES
+						SUM(BAD)   = BADS
+						MEAN(BAD)  = PORCENTAJE_BADS;
+						RUN;
+						
+						PROC SORT DATA=WORK.TEMPORAL OUT=&name_dataset;								/* Ordenar por el porcentaje de bads */
+						BY DESCENDING PORCENTAJE_BADS;
+						RUN;
+			%end;
+		    %else %if &tipo_columna = num %then %do;												/* Si la variable es num usar COALESCE */
+		        %put La variable es num, usar COALESCE;
+						DATA WORK.TEMPORAL;								
+						MERGE      ORIGINA.FLAG_G_B      (IN=F)
+						           ORIGINA.DEMOGRAFICOS  (IN=D);
+						           /* IF &variable_actual = NULL THEN &variable_actual = 'NA';*/	/* PARA COLUMNAS TIPO CHAR */
+						           IF &variable_actual = .  THEN &variable_actual = -999;  			/* PARA COLUMNAS TIPO NUM  */
+						BY         CLIENTE;
+						IF         F;																/* INDICA QUE ES UN LEFT JOIN SOBRE TABLA F */
+						KEEP       &variable_actual CLIENTE BAD;
+						RUN;
+						
+						PROC SUMMARY DATA=WORK.TEMPORAL NWAY;										/* Obtener el numero y porcentaje de bads */
+						CLASS      &variable_actual;
+						VAR        CLIENTE BAD;
+						OUTPUT OUT = WORK.TEMPORAL(DROP=_TYPE_ _FREQ_)
+						N(CLIENTE) = CLIENTES
+						SUM(BAD)   = BADS
+						MEAN(BAD)  = PORCENTAJE_BADS;
+						RUN;
+						
+						PROC SORT DATA=WORK.TEMPORAL OUT=&name_dataset;								/* Ordenar por el porcentaje de bads */
+						BY DESCENDING PORCENTAJE_BADS;
+						RUN;
+		    %end;																
+    %end;													/* Fin del loop */
+%mend procesar_variables;									/* Fin de la macro */
+%procesar_variables; 	
 
-/* SQL */
-PROC SQL;
-CREATE TABLE WORK.TEMPORAL AS
-SELECT 		COALESCEC(D.TIPO_CR_DITO, "NULOS") AS TIPO_CR_DITO,
-			COUNT(D.CLIENTE) AS NRO_CLIENTES,
-			SUM(F.BAD) AS BADS,
-			SUM(F.BAD) / COUNT(D.CLIENTE) AS PORCENTAJE_BADS
-FROM		ORIGINA.DEMOGRAFICOS AS D
-INNER JOIN 	ORIGINA.FLAG_G_B AS F ON D.CLIENTE = F.CLIENTE
-GROUP BY 1
-ORDER BY PORCENTAJE_BADS DESC
-;QUIT;
 
-
-/* SAS */
-DATA WORK.TEMPORAL;
-MERGE 	ORIGINA.DEMOGRAFICOS 	(IN=D)
-		ORIGINA.FLAG_G_B 		(IN=F);
-IF TIPO_CR_DITO = NULL THEN TIPO_CR_DITO = 'NULOS';
-KEEP	CLIENTE TIPO_CR_DITO BAD;
-BY		CLIENTE;
-IF		CLIENTE;
-RUN;
-
-PROC SUMMARY DATA=WORK.TEMPORAL NWAY;
-CLASS TIPO_CR_DITO;
-VAR CLIENTE BAD;
-OUTPUT OUT = WORK.TEMPORAL(DROP=_TYPE_ _FREQ_ )
-N(CLIENTE) = CLIENTES
-SUM(BAD) = BADS
-MEAN(BAD) = PORCENTAJE_BADS;
-RUN;
 
 /* --------------------------------------------------------------------------------------------- */
 
 /* TAREA 3 BASES DE DATOS */
-/* Crear un reporte Rn_SQL_variable y Rn_SAS_Variable por cada uno de los siguientes 
-incisos usando código SQL y código SAS que resuma por cada “veintil” de rango de la 
-variable:  
+/* Crear un reporte Rn_SQL_variable y Rn_SAS_Variable por cada uno de los siguientes incisos usando código SQL y código SAS que 
+resuma por cada “veintil” de rango de la variable:  
 1. Cuantos clientes hay  
-2. Cuántos no pagaron y  
+2. Cuántos no pagaron 
 3. Cuál es el porcentaje de clientes que no pagaron
 Incisos:
-a) Monto Solicitado 
-b) BC Score 
-c) Ingreso Total 
-d) Edad 
-e) Antigüedad en Meses Domicilio 
-f) Antigüedad en Meses en el Empleo
+a) Monto Solicitado   						ORIGINA.SOLICITUD.MONTO_SOLICITADO
+b) BC Score 								ORIGINA.BURO.BC_SCORE
+c) Ingreso Total 							ORIGINA.DEMOGRAFICOS.INGRESO_FIJO + ORIGINA.DEMOGRAFICOS.INGRESO_VARIABLE
+d) Edad 									ORIGINA.DEMOGRAFICOS.FECHA_NACIMIENTO y ORIGINA.SOLICITUD.FECHA_SOLICITUD				
+e) Antigüedad en Meses Domicilio 			ORIGINA.DEMOGRAFICOS.ANOS_DOM Y ORIGINA.DEMOGRAFICOS.MESES_DOM
+f) Antigüedad en Meses en el Empleo			ORIGINA.DEMOGRAFICOS.ANOS_EMP y ORIGINA.DEMOGRAFICOS.MESES_EMP
 
-Nota: Veintil, el rango deberá garantizar tener el 5% de las observaciones, de tal forma 
-que se generen 20 rangos de 5% de población que en total de el 100% de la población   
-Nota2: Consideren respaldar sus códigos ya que se reciclaran los códigos par el 
-siguiente tema del curso : ANALISIS UNIVARIADO  
+Nota: Veintil, el rango deberá garantizar tener el 5% de las observaciones, de tal forma que se generen 20 rangos de 5% de 
+población que en total de el 100% de la población   
+Nota2: Consideren respaldar sus códigos ya que se reciclaran los códigos par el siguiente tema del curso : ANALISIS UNIVARIADO  
 */
 
-/* INCISO A) */
 /* CODIGO SQL */
+/* INCISO A) MONTO_SOLICITADO */
+
 PROC SQL;
-CREATE TABLE WORK.MONTO_SOLIC AS
+CREATE TABLE WORK.TEMPORAL AS
 SELECT 		S.CLIENTE,
-			S.MONTO_SOLICITADO,
+			MONTO_SOLICITADO as MONTO_SOLICITADO_ORIGINAL,
+			CASE 
+				WHEN	MONTO_SOLICITADO IS NULL THEN .
+				ELSE 	MONTO_SOLICITADO
+			END AS MONTO_SOLICITADO,
 			F.BAD
-FROM		ORIGINA.SOLICITUD 	AS S
-INNER JOIN	ORIGINA.FLAG_G_B 	AS F ON S.CLIENTE=F.CLIENTE;
+FROM		ORIGINA.SOLICITUD 		AS S
+INNER JOIN	ORIGINA.FLAG_G_B 		AS F ON F.CLIENTE=S.CLIENTE
+INNER JOIN  ORIGINA.DEMOGRAFICOS 	AS D ON D.CLIENTE=S.CLIENTE
+INNER JOIN  ORIGINA.BURO 			AS B ON B.CLIENTE=S.CLIENTE;
 QUIT;
 
-PROC UNIVARIATE DATA=WORK.MONTO_SOLIC NOPRINT;
+PROC UNIVARIATE DATA=WORK.TEMPORAL NOPRINT;			/* Generar rangos con al menos el 5% de la población cada uno de ellos */
 VAR MONTO_SOLICITADO;
-OUTPUT PCTLPRE=P_ PCTLPTS=0 TO 100 BY 5;		/* Generar rangos con el 5% de la población cada uno de ellos */
-RUN;
-
-PROC PRINT DATA=DATA_MS; 
+OUTPUT OUT=WORK.RANGOS PCTLPRE=P_ PCTLPTS=0 TO 100 BY 5;		
 RUN;
 
 PROC SQL;
-CREATE TABLE WORK.RA_SQL_MONTO_SOLIC AS
-SELECT 	Z.RANGO_MONTO_SOLIC,
-		COUNT(CLIENTE) AS NRO_CLIENTES,
+CREATE TABLE WORK.RA_SQL_MONTO_SOLICITADO AS 
+SELECT 	RANGO_MONTO_SOLICITADO,
+		COUNT(CLIENTE) AS CLIENTES,
 		SUM(BAD) AS BADS,
 		AVG(BAD) AS PORCENTAJE_BADS
 FROM
-(
-	SELECT 	S.CLIENTE,
-			F.BAD,
-			S.MONTO_SOLICITADO,
+(   	/**************************************** Z ****************************************/
+	SELECT 	CLIENTE,
+			BAD,
+			MONTO_SOLICITADO,
 			CASE 
-			WHEN S.MONTO_SOLICITADO >= 1500 AND S.MONTO_SOLICITADO < 3000 THEN '00 1500 - 3000'
-			WHEN S.MONTO_SOLICITADO >= 3000 AND S.MONTO_SOLICITADO < 5000 THEN '01 3000 - 5000'
-			WHEN S.MONTO_SOLICITADO >= 5000 AND S.MONTO_SOLICITADO < 6000 THEN '02 5000 - 6000'
-			WHEN S.MONTO_SOLICITADO >= 6000 AND S.MONTO_SOLICITADO < 7000 THEN '03 6000 - 7000'
-			WHEN S.MONTO_SOLICITADO >= 7000 AND S.MONTO_SOLICITADO < 8000 THEN '04 7000 - 8000'
-			WHEN S.MONTO_SOLICITADO >= 8000 AND S.MONTO_SOLICITADO < 9000 THEN '05 8000 - 9000'
-			WHEN S.MONTO_SOLICITADO >= 9000 AND S.MONTO_SOLICITADO < 10000 THEN '06 9000 - 10000'
-			WHEN S.MONTO_SOLICITADO >= 10000 AND S.MONTO_SOLICITADO < 15000 THEN '07 10000 - 15000'
-			WHEN S.MONTO_SOLICITADO >= 15000 AND S.MONTO_SOLICITADO < 20000 THEN '08 15000 - 20000'
-			WHEN S.MONTO_SOLICITADO >= 20000 								THEN '09 20000 - MAS'
-			END AS RANGO_MONTO_SOLIC
-	FROM ORIGINA.SOLICITUD AS S
-	INNER JOIN ORIGINA.FLAG_G_B AS F ON S.CLIENTE=F.CLIENTE
-) AS Z
+			WHEN MONTO_SOLICITADO >= 1500  AND MONTO_SOLICITADO < 3000  THEN '00 1500 - 3000'
+			WHEN MONTO_SOLICITADO >= 3000  AND MONTO_SOLICITADO < 5000  THEN '01 3000 - 5000'
+			WHEN MONTO_SOLICITADO >= 5000  AND MONTO_SOLICITADO < 6000  THEN '02 5000 - 6000'
+			WHEN MONTO_SOLICITADO >= 6000  AND MONTO_SOLICITADO < 7000  THEN '03 6000 - 7000'
+			WHEN MONTO_SOLICITADO >= 7000  AND MONTO_SOLICITADO < 8000  THEN '04 7000 - 8000'
+			WHEN MONTO_SOLICITADO >= 8000  AND MONTO_SOLICITADO < 9000  THEN '05 8000 - 9000'
+			WHEN MONTO_SOLICITADO >= 9000  AND MONTO_SOLICITADO < 10000 THEN '06 9000 - 10000'
+			WHEN MONTO_SOLICITADO >= 10000 AND MONTO_SOLICITADO < 15000 THEN '07 10000 - 15000'
+			WHEN MONTO_SOLICITADO >= 15000 AND MONTO_SOLICITADO < 20000 THEN '08 15000 - 20000'
+			WHEN MONTO_SOLICITADO >= 20000 								THEN '09 20000 - MAS'
+			END AS RANGO_MONTO_SOLICITADO
+		FROM	WORK.TEMPORAL
+) AS Z	/**************************************** Z ****************************************/
 GROUP BY 1
 ORDER BY 1
 ;QUIT;
 
 
+/* CODIGO SQL */
+/* INCISO B) BC_SCORE */
+
+PROC SQL;
+CREATE TABLE WORK.TEMPORAL AS
+SELECT 		S.CLIENTE,
+			BC_SCORE AS BC_SCORE_ORIGINAL,
+			CASE 
+				WHEN	BC_SCORE <= 0 	 THEN .
+				WHEN 	BC_SCORE IS NULL THEN .
+				ELSE 	BC_SCORE
+			END AS BC_SCORE,
+			BAD
+FROM		ORIGINA.SOLICITUD 		AS S
+INNER JOIN	ORIGINA.FLAG_G_B 		AS F ON F.CLIENTE=S.CLIENTE
+INNER JOIN  ORIGINA.DEMOGRAFICOS 	AS D ON D.CLIENTE=S.CLIENTE
+INNER JOIN  ORIGINA.BURO 			AS B ON B.CLIENTE=S.CLIENTE;
+QUIT;
+
+PROC UNIVARIATE DATA=WORK.TEMPORAL NOPRINT;			/* Generar rangos con al menos el 5% de la población cada uno de ellos */
+VAR BC_SCORE;
+OUTPUT OUT=WORK.RANGOS PCTLPRE=P_ PCTLPTS=0 TO 100 BY 5;		
+RUN;
+
+PROC SQL;
+CREATE TABLE WORK.RB_SQL_BC_SCORE AS
+SELECT 	RANGO_BC_SCORE,
+		COUNT(CLIENTE) AS CLIENTES,
+		SUM(BAD) AS BADS,
+		AVG(BAD) AS PORCENTAJE_BADS
+FROM
+( 	/**************************************** Z ****************************************/
+SELECT 		CLIENTE,
+			BAD,
+			BC_SCORE,
+			CASE 
+				WHEN BC_SCORE >= 589  AND BC_SCORE < 633  THEN '01 589 - 633'
+				WHEN BC_SCORE >= 633  AND BC_SCORE < 647  THEN '02 633 - 647'
+				WHEN BC_SCORE >= 647  AND BC_SCORE < 657  THEN '03 647 - 657'
+				WHEN BC_SCORE >= 657  AND BC_SCORE < 665  THEN '04 657 - 665'
+				WHEN BC_SCORE >= 665  AND BC_SCORE < 673  THEN '05 665 - 673'
+				WHEN BC_SCORE >= 673  AND BC_SCORE < 679  THEN '06 673 - 679'
+				WHEN BC_SCORE >= 679  AND BC_SCORE < 685  THEN '07 679 - 685'
+				WHEN BC_SCORE >= 685  AND BC_SCORE < 689  THEN '08 685 - 689'
+				WHEN BC_SCORE >= 689  AND BC_SCORE < 694  THEN '09 689 - 694'
+				WHEN BC_SCORE >= 694  AND BC_SCORE < 697  THEN '10 694 - 697'
+				WHEN BC_SCORE >= 697  AND BC_SCORE < 701  THEN '11 697 - 701'
+				WHEN BC_SCORE >= 701  AND BC_SCORE < 705  THEN '12 701 - 705'
+				WHEN BC_SCORE >= 705  AND BC_SCORE < 710  THEN '13 705 - 710'
+				WHEN BC_SCORE >= 710  AND BC_SCORE < 714  THEN '14 710 - 714'
+				WHEN BC_SCORE >= 714  AND BC_SCORE < 718  THEN '15 714 - 718'
+				WHEN BC_SCORE >= 718  AND BC_SCORE < 723  THEN '16 718 - 723'
+				WHEN BC_SCORE >= 723  AND BC_SCORE < 729  THEN '17 723 - 729'
+				WHEN BC_SCORE >= 729  AND BC_SCORE < 739  THEN '18 729 - 739'
+				WHEN BC_SCORE >= 739  AND BC_SCORE < 748  THEN '19 739 - 748'
+				WHEN BC_SCORE >= 748                        THEN '20 748 - MAS'
+			END AS RANGO_BC_SCORE
+		FROM	WORK.TEMPORAL
+) AS Z	/**************************************** Z ****************************************/
+GROUP BY 1
+ORDER BY 1
+;QUIT;
+
+
+/* CODIGO SQL */
+/* INCISO C) INGRESO_TOTAL */
+
+PROC SQL;
+CREATE TABLE WORK.TEMPORAL AS
+SELECT 		S.CLIENTE,
+			INGRESO_FIJO + INGRESO_VARIABLE AS INGRESO_TOTAL_ORIGINAL,
+			CASE 
+				WHEN	INGRESO_FIJO 	 IS NULL 	   THEN .
+				WHEN 	INGRESO_VARIABLE IS NULL       THEN .
+				ELSE 	INGRESO_FIJO + INGRESO_VARIABLE
+			END AS INGRESO_TOTAL,
+			BAD
+FROM		ORIGINA.SOLICITUD 		AS S
+INNER JOIN	ORIGINA.FLAG_G_B 		AS F ON F.CLIENTE=S.CLIENTE
+INNER JOIN  ORIGINA.DEMOGRAFICOS 	AS D ON D.CLIENTE=S.CLIENTE
+INNER JOIN  ORIGINA.BURO 			AS B ON B.CLIENTE=S.CLIENTE;
+QUIT;
+
+PROC UNIVARIATE DATA=WORK.TEMPORAL NOPRINT;			/* Generar rangos con al menos el 5% de la población cada uno de ellos */
+VAR INGRESO_TOTAL;
+OUTPUT OUT=WORK.RANGOS PCTLPRE=P_ PCTLPTS=0 TO 100 BY 5;		
+RUN;
+
+PROC SQL;
+CREATE TABLE WORK.RC_SQL_INGRESO_TOTAL AS
+SELECT 	RANGO_INGRESO_TOTAL,
+		COUNT(CLIENTE) AS CLIENTES,
+		SUM(BAD) AS BADS,
+		AVG(BAD) AS PORCENTAJE_BADS
+FROM
+( 	/**************************************** Z ****************************************/
+SELECT 		CLIENTE,
+			BAD,
+			INGRESO_TOTAL,
+			CASE 
+				WHEN INGRESO_TOTAL >= 1959.05  AND INGRESO_TOTAL <3372    	THEN '01 1959.05 - 3372 ' 
+				WHEN INGRESO_TOTAL >= 3372     AND INGRESO_TOTAL <3990    	THEN '02 3372 - 3990 ' 
+				WHEN INGRESO_TOTAL >= 3990     AND INGRESO_TOTAL <4286    	THEN '03 3990 - 4286 ' 
+				WHEN INGRESO_TOTAL >= 4286     AND INGRESO_TOTAL <4619.02 	THEN '04 4286 - 4619.02 ' 
+				WHEN INGRESO_TOTAL >= 4619.02  AND INGRESO_TOTAL <5000    	THEN '05 4619.02 - 5000 ' 
+				WHEN INGRESO_TOTAL >= 5000     AND INGRESO_TOTAL <5196    	THEN '06 5000 - 5196 ' 
+				WHEN INGRESO_TOTAL >= 5196     AND INGRESO_TOTAL <5520    	THEN '07 5196 - 5520 ' 
+				WHEN INGRESO_TOTAL >= 5520     AND INGRESO_TOTAL <6000    	THEN '08 5520 - 6000 ' 
+				WHEN INGRESO_TOTAL >= 6000     AND INGRESO_TOTAL <6062    	THEN '09 6000 - 6062 ' 
+				WHEN INGRESO_TOTAL >= 6062     AND INGRESO_TOTAL <6500  	THEN '10 6062 - 6500 ' 
+				WHEN INGRESO_TOTAL >= 6500     AND INGRESO_TOTAL <6990  	THEN '11 6500 - 6990 ' 
+				WHEN INGRESO_TOTAL >= 6990     AND INGRESO_TOTAL <7342.78 	THEN '12 6990 - 7342.78 ' 
+				WHEN INGRESO_TOTAL >= 7342.78  AND INGRESO_TOTAL <7936.88 	THEN '13 7342.78 - 7936.88 ' 
+				WHEN INGRESO_TOTAL >= 7936.88  AND INGRESO_TOTAL <8027  	THEN '14 7936.88 - 8027 ' 
+				WHEN INGRESO_TOTAL >= 8027     AND INGRESO_TOTAL <8713.8  	THEN '15 8027 - 8713.8 ' 
+				WHEN INGRESO_TOTAL >= 8713.8   AND INGRESO_TOTAL <9376.33 	THEN '16 8713.8 - 9376.33 ' 
+				WHEN INGRESO_TOTAL >= 9376.33  AND INGRESO_TOTAL <10624  	THEN '17 9376.33 - 10624 ' 
+				WHEN INGRESO_TOTAL >= 10624    AND INGRESO_TOTAL <13000  	THEN '18 10624 - 13000 ' 
+				WHEN INGRESO_TOTAL >= 13000    AND INGRESO_TOTAL <18495  	THEN '19 13000 - 18495 ' 
+				WHEN INGRESO_TOTAL >= 18495                        			THEN '20 18495 - MAS ' 
+			END AS RANGO_INGRESO_TOTAL
+		FROM	WORK.TEMPORAL
+) AS Z	/**************************************** Z ****************************************/
+GROUP BY 1
+ORDER BY 1
+;QUIT;
+
+
+
+/* CODIGO SQL */
+/* INCISO D) EDAD */
+
+PROC SQL;
+CREATE TABLE WORK.TEMPORAL AS
+SELECT 		S.CLIENTE,
+			INTCK('YEAR',FECHA_NACIMIENTO,S.FECHA_SOLICITUD) AS EDAD_ORIGINAL,
+			CASE 
+				WHEN	INTCK('YEAR',FECHA_NACIMIENTO,S.FECHA_SOLICITUD) 	 IS NULL 	   THEN .
+				ELSE 	INTCK('YEAR',FECHA_NACIMIENTO,S.FECHA_SOLICITUD)
+			END AS EDAD,
+			BAD
+FROM		ORIGINA.SOLICITUD 		AS S
+INNER JOIN	ORIGINA.FLAG_G_B 		AS F ON F.CLIENTE=S.CLIENTE
+INNER JOIN  ORIGINA.DEMOGRAFICOS 	AS D ON D.CLIENTE=S.CLIENTE
+INNER JOIN  ORIGINA.BURO 			AS B ON B.CLIENTE=S.CLIENTE;
+QUIT;
+
+PROC UNIVARIATE DATA=WORK.TEMPORAL NOPRINT;			/* Generar rangos con al menos el 5% de la población cada uno de ellos */
+VAR EDAD;
+OUTPUT OUT=WORK.RANGOS PCTLPRE=P_ PCTLPTS=0 TO 100 BY 5;		
+RUN;
+
+PROC SQL;
+CREATE TABLE WORK.RD_SQL_EDAD AS
+SELECT 	RANGO_EDAD,
+		COUNT(CLIENTE) AS CLIENTES,
+		SUM(BAD) AS BADS,
+		AVG(BAD) AS PORCENTAJE_BADS
+FROM
+( 	/**************************************** Z ****************************************/
+SELECT 		CLIENTE,
+			BAD,
+			EDAD,
+			CASE 
+				WHEN EDAD >= 18  AND EDAD <21  	THEN '01 18 - 21 ' 
+				WHEN EDAD >= 21  AND EDAD <23  	THEN '02 21 - 23 ' 
+				WHEN EDAD >= 23  AND EDAD <25  	THEN '03 23 - 25 ' 
+				WHEN EDAD >= 25  AND EDAD <26  	THEN '04 25 - 26 ' 
+				WHEN EDAD >= 26  AND EDAD <28  	THEN '05 26 - 28 ' 
+				WHEN EDAD >= 28  AND EDAD <30  	THEN '06 28 - 30 ' 
+				WHEN EDAD >= 30  AND EDAD <31  	THEN '07 30 - 31 ' 
+				WHEN EDAD >= 31  AND EDAD <33  	THEN '08 31 - 33 ' 
+				WHEN EDAD >= 33  AND EDAD <35  	THEN '09 33 - 35 ' 
+				WHEN EDAD >= 35  AND EDAD <37  	THEN '10 35 - 37 ' 
+				WHEN EDAD >= 37  AND EDAD <39  	THEN '11 37 - 39 ' 
+				WHEN EDAD >= 39  AND EDAD <41  	THEN '12 39 - 41 ' 
+				WHEN EDAD >= 41  AND EDAD <42  	THEN '13 41 - 42 ' 
+				WHEN EDAD >= 42  AND EDAD <45  	THEN '14 42 - 45 ' 
+				WHEN EDAD >= 45  AND EDAD <47  	THEN '15 45 - 47 ' 
+				WHEN EDAD >= 47  AND EDAD <49  	THEN '16 47 - 49 ' 
+				WHEN EDAD >= 49  AND EDAD <52  	THEN '17 49 - 52 ' 
+				WHEN EDAD >= 52  AND EDAD <55  	THEN '18 52 - 55 ' 
+				WHEN EDAD >= 55  AND EDAD <60  	THEN '19 55 - 60 ' 
+				WHEN EDAD >= 60    				THEN '20 60 - MAS ' 
+			END AS RANGO_EDAD
+		FROM	WORK.TEMPORAL
+) AS Z	/**************************************** Z ****************************************/
+GROUP BY 1
+ORDER BY 1
+;QUIT;
+
+
+/* CODIGO SQL */
+/* INCISO E) ANTIGUEDAD_DOMICILIO */
+
+PROC SQL;
+CREATE TABLE WORK.TEMPORAL AS
+SELECT 		S.CLIENTE,
+			ANOS_DOM + MESES_DOM AS ANTIGUEDAD_DOMICILIO_ORIGINAL,
+			CASE 
+				WHEN	ANOS_DOM + MESES_DOM 	 IS NULL 	   THEN .
+				ELSE 	ANOS_DOM + MESES_DOM
+			END AS ANTIGUEDAD_DOMICILIO,
+			BAD
+FROM		ORIGINA.SOLICITUD 		AS S
+INNER JOIN	ORIGINA.FLAG_G_B 		AS F ON F.CLIENTE=S.CLIENTE
+INNER JOIN  ORIGINA.DEMOGRAFICOS 	AS D ON D.CLIENTE=S.CLIENTE
+INNER JOIN  ORIGINA.BURO 			AS B ON B.CLIENTE=S.CLIENTE;
+QUIT;
+
+PROC UNIVARIATE DATA=WORK.TEMPORAL NOPRINT;			/* Generar rangos con al menos el 5% de la población cada uno de ellos */
+VAR ANTIGUEDAD_DOMICILIO;
+OUTPUT OUT=WORK.RANGOS PCTLPRE=P_ PCTLPTS=0 TO 100 BY 5;		
+RUN;
+
+PROC SQL;
+CREATE TABLE WORK.RE_SQL_ANTIGUEDAD_DOMICILIO AS
+SELECT 	RANGO_ANTIGUEDAD_DOMICILIO,
+		COUNT(CLIENTE) AS CLIENTES,
+		SUM(BAD) AS BADS,
+		AVG(BAD) AS PORCENTAJE_BADS
+FROM
+( 	/**************************************** Z ****************************************/
+SELECT 		CLIENTE,
+			BAD,
+			ANTIGUEDAD_DOMICILIO,
+			CASE 
+				WHEN ANTIGUEDAD_DOMICILIO >= 0  AND ANTIGUEDAD_DOMICILIO <5  THEN '01 0 - 5 ' 
+				WHEN ANTIGUEDAD_DOMICILIO >= 5  AND ANTIGUEDAD_DOMICILIO <6  THEN '02 5 - 6 ' 
+				WHEN ANTIGUEDAD_DOMICILIO >= 6  AND ANTIGUEDAD_DOMICILIO <8  THEN '03 6 - 8 ' 
+				WHEN ANTIGUEDAD_DOMICILIO >= 8  AND ANTIGUEDAD_DOMICILIO <10  THEN '04 8 - 10 ' 
+				WHEN ANTIGUEDAD_DOMICILIO >= 10  AND ANTIGUEDAD_DOMICILIO <11  THEN '05 10 - 11 ' 
+				WHEN ANTIGUEDAD_DOMICILIO >= 11  AND ANTIGUEDAD_DOMICILIO <14  THEN '06 11 - 14 ' 
+				WHEN ANTIGUEDAD_DOMICILIO >= 14  AND ANTIGUEDAD_DOMICILIO <15  THEN '07 14 - 15 ' 
+				WHEN ANTIGUEDAD_DOMICILIO >= 15  AND ANTIGUEDAD_DOMICILIO <18  THEN '08 15 - 18 ' 
+				WHEN ANTIGUEDAD_DOMICILIO >= 18  AND ANTIGUEDAD_DOMICILIO <20  THEN '09 18 - 20 ' 
+				WHEN ANTIGUEDAD_DOMICILIO >= 20  AND ANTIGUEDAD_DOMICILIO <22  THEN '10 20 - 22 ' 
+				WHEN ANTIGUEDAD_DOMICILIO >= 22  AND ANTIGUEDAD_DOMICILIO <23  THEN '11 22 - 23 ' 
+				WHEN ANTIGUEDAD_DOMICILIO >= 23  AND ANTIGUEDAD_DOMICILIO <25  THEN '12 23 - 25 ' 
+				WHEN ANTIGUEDAD_DOMICILIO >= 25  AND ANTIGUEDAD_DOMICILIO <26  THEN '13 25 - 26 ' 
+				WHEN ANTIGUEDAD_DOMICILIO >= 26  AND ANTIGUEDAD_DOMICILIO <29  THEN '14 26 - 29 ' 
+				WHEN ANTIGUEDAD_DOMICILIO >= 29  AND ANTIGUEDAD_DOMICILIO <30  THEN '15 29 - 30 ' 
+				WHEN ANTIGUEDAD_DOMICILIO >= 30  AND ANTIGUEDAD_DOMICILIO <33  THEN '16 30 - 33 ' 
+				WHEN ANTIGUEDAD_DOMICILIO >= 33  AND ANTIGUEDAD_DOMICILIO <36  THEN '17 33 - 36 ' 
+				WHEN ANTIGUEDAD_DOMICILIO >= 36                                 THEN '18 36 - MAS ' 
+			END AS RANGO_ANTIGUEDAD_DOMICILIO
+		FROM	WORK.TEMPORAL
+) AS Z	/**************************************** Z ****************************************/
+GROUP BY 1
+ORDER BY 1
+;QUIT;
+
+
+
+/* CODIGO SQL */
+/* INCISO F) ANTIGUEDAD_EMPLEO */
+
+PROC SQL;
+CREATE TABLE WORK.TEMPORAL AS
+SELECT 		S.CLIENTE,
+			ANOS_EMP,
+			MESES_EMP,
+			ANOS_EMP + MESES_EMP AS ANTIGUEDAD_EMPLEO_ORIGINAL,
+			CASE 
+				WHEN	ANOS_EMP + MESES_EMP 	 IS NULL 	   THEN .
+				ELSE 	ANOS_EMP + MESES_EMP
+			END AS ANTIGUEDAD_EMPLEO,
+			BAD
+FROM		ORIGINA.SOLICITUD 		AS S
+INNER JOIN	ORIGINA.FLAG_G_B 		AS F ON F.CLIENTE=S.CLIENTE
+INNER JOIN  ORIGINA.DEMOGRAFICOS 	AS D ON D.CLIENTE=S.CLIENTE
+INNER JOIN  ORIGINA.BURO 			AS B ON B.CLIENTE=S.CLIENTE;
+QUIT;
+
+PROC UNIVARIATE DATA=WORK.TEMPORAL NOPRINT;			/* Generar rangos con al menos el 5% de la población cada uno de ellos */
+VAR ANTIGUEDAD_EMPLEO;
+OUTPUT OUT=WORK.RANGOS PCTLPRE=P_ PCTLPTS=0 TO 100 BY 5;		
+RUN;
+
+PROC SQL;
+CREATE TABLE WORK.RF_ANTIGUEDAD_EMPLEO AS
+SELECT 	RANGO_ANTIGUEDAD_EMPLEO,
+		COUNT(CLIENTE) AS CLIENTES,
+		SUM(BAD) AS BADS,
+		AVG(BAD) AS PORCENTAJE_BADS
+FROM
+( 	/**************************************** Z ****************************************/
+SELECT 		CLIENTE,
+			BAD,
+			ANTIGUEDAD_EMPLEO,
+			CASE 
+				WHEN ANTIGUEDAD_EMPLEO >= 0  AND ANTIGUEDAD_EMPLEO <2  THEN '01 0 - 2 ' 
+				WHEN ANTIGUEDAD_EMPLEO >= 2  AND ANTIGUEDAD_EMPLEO <3  THEN '02 2 - 3 ' 
+				WHEN ANTIGUEDAD_EMPLEO >= 3  AND ANTIGUEDAD_EMPLEO <3  THEN '03 3 - 3 ' 
+				WHEN ANTIGUEDAD_EMPLEO >= 3  AND ANTIGUEDAD_EMPLEO <4  THEN '04 3 - 4 ' 
+				WHEN ANTIGUEDAD_EMPLEO >= 4  AND ANTIGUEDAD_EMPLEO <4  THEN '05 4 - 4 ' 
+				WHEN ANTIGUEDAD_EMPLEO >= 4  AND ANTIGUEDAD_EMPLEO <5  THEN '06 4 - 5 ' 
+				WHEN ANTIGUEDAD_EMPLEO >= 5  AND ANTIGUEDAD_EMPLEO <5  THEN '07 5 - 5 ' 
+				WHEN ANTIGUEDAD_EMPLEO >= 5  AND ANTIGUEDAD_EMPLEO <6  THEN '08 5 - 6 ' 
+				WHEN ANTIGUEDAD_EMPLEO >= 6  AND ANTIGUEDAD_EMPLEO <7  THEN '09 6 - 7 ' 
+				WHEN ANTIGUEDAD_EMPLEO >= 7  AND ANTIGUEDAD_EMPLEO <8  THEN '10 7 - 8 ' 
+				WHEN ANTIGUEDAD_EMPLEO >= 8  AND ANTIGUEDAD_EMPLEO <9  THEN '11 8 - 9 ' 
+				WHEN ANTIGUEDAD_EMPLEO >= 9  AND ANTIGUEDAD_EMPLEO <10  THEN '12 9 - 10 ' 
+				WHEN ANTIGUEDAD_EMPLEO >= 10  AND ANTIGUEDAD_EMPLEO <10  THEN '13 10 - 10 ' 
+				WHEN ANTIGUEDAD_EMPLEO >= 10  AND ANTIGUEDAD_EMPLEO <11  THEN '14 10 - 11 ' 
+				WHEN ANTIGUEDAD_EMPLEO >= 11  AND ANTIGUEDAD_EMPLEO <13  THEN '15 11 - 13 ' 
+				WHEN ANTIGUEDAD_EMPLEO >= 13  AND ANTIGUEDAD_EMPLEO <15  THEN '16 13 - 15 ' 
+				WHEN ANTIGUEDAD_EMPLEO >= 15  AND ANTIGUEDAD_EMPLEO <16  THEN '17 15 - 16 ' 
+				WHEN ANTIGUEDAD_EMPLEO >= 16  AND ANTIGUEDAD_EMPLEO <20  THEN '18 16 - 20 ' 
+				WHEN ANTIGUEDAD_EMPLEO >= 20  AND ANTIGUEDAD_EMPLEO <25  THEN '19 20 - 25 ' 
+				WHEN ANTIGUEDAD_EMPLEO >= 25                                 THEN '20 25 - MAS ' 
+			END AS RANGO_ANTIGUEDAD_EMPLEO
+		FROM	WORK.TEMPORAL
+) AS Z	/**************************************** Z ****************************************/
+GROUP BY 1
+ORDER BY 1
+;QUIT;
+
+
+
+
 /* CODIGO SAS */
+/* INCISO A) MONTO_SOLICITADO */
+
 DATA WORK.TEMPORAL;
-MERGE 	ORIGINA.SOLICITUD 	(IN=S)
-		ORIGINA.FLAG_G_B	(IN=F);
+MERGE 	ORIGINA.SOLICITUD 		(IN=S)
+		ORIGINA.FLAG_G_B		(IN=F)
+		ORIGINA.DEMOGRAFICOS 	(IN=D)
+		ORIGINA.BURO 			(IN=B);
 BY		CLIENTE;
 IF		F;
-IF MONTO_SOLICITADO >= 1500 AND MONTO_SOLICITADO < 3000   THEN RANGO_MONTO_SOLIC='00 1500 - 3000';
-IF MONTO_SOLICITADO >= 3000 AND MONTO_SOLICITADO < 5000   THEN RANGO_MONTO_SOLIC='01 3000 - 5000';
-IF MONTO_SOLICITADO >= 5000 AND MONTO_SOLICITADO < 6000   THEN RANGO_MONTO_SOLIC='02 5000 - 6000';
-IF MONTO_SOLICITADO >= 6000 AND MONTO_SOLICITADO < 7000   THEN RANGO_MONTO_SOLIC='03 6000 - 7000';
-IF MONTO_SOLICITADO >= 7000 AND MONTO_SOLICITADO < 8000   THEN RANGO_MONTO_SOLIC='04 7000 - 8000';
-IF MONTO_SOLICITADO >= 8000 AND MONTO_SOLICITADO < 9000   THEN RANGO_MONTO_SOLIC='05 8000 - 9000';
-IF MONTO_SOLICITADO >= 9000 AND MONTO_SOLICITADO < 10000  THEN RANGO_MONTO_SOLIC='06 9000 - 10000';
-IF MONTO_SOLICITADO >= 10000 AND MONTO_SOLICITADO < 15000 THEN RANGO_MONTO_SOLIC='07 10000 - 15000';
-IF MONTO_SOLICITADO >= 15000 AND MONTO_SOLICITADO < 20000 THEN RANGO_MONTO_SOLIC='08 15000 - 20000';
-IF MONTO_SOLICITADO >= 20000 								  THEN RANGO_MONTO_SOLIC='09 20000 - MAS';
-KEEP 	CLIENTE MONTO_SOLICITADO RANGO_MONTO_SOLIC BAD;
+FORMAT RANGO_MONTO_SOLICITADO $25.;
+IF MONTO_SOLICITADO >= 1500 AND MONTO_SOLICITADO < 3000   THEN RANGO_MONTO_SOLICITADO='00 1500 - 3000';
+IF MONTO_SOLICITADO >= 3000 AND MONTO_SOLICITADO < 5000   THEN RANGO_MONTO_SOLICITADO='01 3000 - 5000';
+IF MONTO_SOLICITADO >= 5000 AND MONTO_SOLICITADO < 6000   THEN RANGO_MONTO_SOLICITADO='02 5000 - 6000';
+IF MONTO_SOLICITADO >= 6000 AND MONTO_SOLICITADO < 7000   THEN RANGO_MONTO_SOLICITADO='03 6000 - 7000';
+IF MONTO_SOLICITADO >= 7000 AND MONTO_SOLICITADO < 8000   THEN RANGO_MONTO_SOLICITADO='04 7000 - 8000';
+IF MONTO_SOLICITADO >= 8000 AND MONTO_SOLICITADO < 9000   THEN RANGO_MONTO_SOLICITADO='05 8000 - 9000';
+IF MONTO_SOLICITADO >= 9000 AND MONTO_SOLICITADO < 10000  THEN RANGO_MONTO_SOLICITADO='06 9000 - 10000';
+IF MONTO_SOLICITADO >= 10000 AND MONTO_SOLICITADO < 15000 THEN RANGO_MONTO_SOLICITADO='07 10000 - 15000';
+IF MONTO_SOLICITADO >= 15000 AND MONTO_SOLICITADO < 20000 THEN RANGO_MONTO_SOLICITADO='08 15000 - 20000';
+IF MONTO_SOLICITADO >= 20000 								  THEN RANGO_MONTO_SOLICITADO='09 20000 - MAS';
+KEEP 	CLIENTE MONTO_SOLICITADO RANGO_MONTO_SOLICITADO BAD;
 RUN;
 
 PROC SUMMARY DATA=WORK.TEMPORAL NWAY;
-CLASS	RANGO_MONTO_SOLIC;
+CLASS	RANGO_MONTO_SOLICITADO;
 VAR		CLIENTE BAD;
-OUTPUT OUT=WORK.TEMPORAL(DROP=_TYPE_ _FREQ_)
-N(CLIENTE) = NRO_CLIENTES
+OUTPUT OUT=WORK.RA_SAS_MONTO_SOLICITADO(DROP=_TYPE_ _FREQ_)
+N(CLIENTE) = CLIENTES
 SUM(BAD) = BADS
 MEAN(BAD) = PORCENTAJE_BADS;
 RUN;
+
+
+/* CODIGO SAS */
+/* INCISO B) BC_SCORE */
+
+DATA WORK.TEMPORAL;
+MERGE 	ORIGINA.SOLICITUD 		(IN=S)
+		ORIGINA.FLAG_G_B		(IN=F)
+		ORIGINA.DEMOGRAFICOS 	(IN=D)
+		ORIGINA.BURO 			(IN=B);
+BY		CLIENTE;
+IF		F;
+IF BC_SCORE <= 0  THEN BC_SCORE_2 = .;
+IF BC_SCORE >  0  THEN BC_SCORE_2 = BC_SCORE;
+FORMAT RANGO_BC_SCORE $25.;
+IF BC_SCORE_2 >= 589  AND BC_SCORE_2 < 633  THEN RANGO_BC_SCORE ='01 589 - 633';
+IF BC_SCORE_2 >= 633  AND BC_SCORE_2 < 647  THEN RANGO_BC_SCORE ='02 633 - 647';
+IF BC_SCORE_2 >= 647  AND BC_SCORE_2 < 657  THEN RANGO_BC_SCORE ='03 647 - 657';
+IF BC_SCORE_2 >= 657  AND BC_SCORE_2 < 665  THEN RANGO_BC_SCORE ='04 657 - 665';
+IF BC_SCORE_2 >= 665  AND BC_SCORE_2 < 673  THEN RANGO_BC_SCORE ='05 665 - 673';
+IF BC_SCORE_2 >= 673  AND BC_SCORE_2 < 679  THEN RANGO_BC_SCORE ='06 673 - 679';
+IF BC_SCORE_2 >= 679  AND BC_SCORE_2 < 685  THEN RANGO_BC_SCORE ='07 679 - 685';
+IF BC_SCORE_2 >= 685  AND BC_SCORE_2 < 689  THEN RANGO_BC_SCORE ='08 685 - 689';
+IF BC_SCORE_2 >= 689  AND BC_SCORE_2 < 694  THEN RANGO_BC_SCORE ='09 689 - 694';
+IF BC_SCORE_2 >= 694  AND BC_SCORE_2 < 697  THEN RANGO_BC_SCORE ='10 694 - 697';
+IF BC_SCORE_2 >= 697  AND BC_SCORE_2 < 701  THEN RANGO_BC_SCORE ='11 697 - 701';
+IF BC_SCORE_2 >= 701  AND BC_SCORE_2 < 705  THEN RANGO_BC_SCORE ='12 701 - 705';
+IF BC_SCORE_2 >= 705  AND BC_SCORE_2 < 710  THEN RANGO_BC_SCORE ='13 705 - 710';
+IF BC_SCORE_2 >= 710  AND BC_SCORE_2 < 714  THEN RANGO_BC_SCORE ='14 710 - 714';
+IF BC_SCORE_2 >= 714  AND BC_SCORE_2 < 718  THEN RANGO_BC_SCORE ='15 714 - 718';
+IF BC_SCORE_2 >= 718  AND BC_SCORE_2 < 723  THEN RANGO_BC_SCORE ='16 718 - 723';
+IF BC_SCORE_2 >= 723  AND BC_SCORE_2 < 729  THEN RANGO_BC_SCORE ='17 723 - 729';
+IF BC_SCORE_2 >= 729  AND BC_SCORE_2 < 739  THEN RANGO_BC_SCORE ='18 729 - 739';
+IF BC_SCORE_2 >= 739  AND BC_SCORE_2 < 748  THEN RANGO_BC_SCORE ='19 739 - 748';
+IF BC_SCORE_2 >= 748                        THEN RANGO_BC_SCORE ='20 748 - MAS';
+KEEP 	CLIENTE BC_SCORE_2 RANGO_BC_SCORE BAD;
+RUN;
+
+PROC SUMMARY DATA=WORK.TEMPORAL NWAY;
+CLASS	RANGO_BC_SCORE / MISSING;
+VAR		CLIENTE BAD;
+OUTPUT OUT=WORK.RB_SAS_BC_SCORE(DROP=_TYPE_ _FREQ_)
+N(CLIENTE) = CLIENTES
+SUM(BAD) = BADS
+MEAN(BAD) = PORCENTAJE_BADS;
+RUN;
+
+
 
