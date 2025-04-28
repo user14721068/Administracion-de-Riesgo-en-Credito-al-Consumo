@@ -1,4 +1,5 @@
-/* ---------------------------------------------------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------------------------------------------- */       
+
 /* Ejercicios c1 */
 
 /*Ejemplo*/
@@ -924,8 +925,8 @@ SELECT 		COALESCEC(PUESTO_SOLICITANTE,"NA") AS PUESTO_SOLICITANTE,  				/* PARA 
 FROM 		ORIGINA.DEMOGRAFICOS AS D
 INNER JOIN 	ORIGINA.FLAG_G_B AS F ON D.CLIENTE = F.CLIENTE
 GROUP BY 	1
-ORDER BY 	4 DESC
-;QUIT;
+ORDER BY 	4 DESC;
+QUIT;
 
 /* SAS */
 /* SOLUCION PARA LA VARIABLE TIPO_CR_DITO */
@@ -1571,9 +1572,6 @@ N(CLIENTE) = CLIENTES
 SUM(BAD) = BADS
 MEAN(BAD) = PORCENTAJE_BADS;
 RUN;
-
-
-
 
 
 
